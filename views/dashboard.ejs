@@ -152,73 +152,112 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
             <a href="#" class="nav-link active" id="nav-stats">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-tachometer-alt text-info"></i>
               <p data-i18n="dashboardOverview">Dashboard Overview</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-catalogs-list">
-              <i class="nav-icon fas fa-list"></i>
-              <p data-i18n="catalogList">Catalog List</p>
+
+          <li class="nav-header text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 0.5rem 1rem;">Management</li>
+
+          <!-- Catalog Group -->
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-layer-group text-info"></i>
+              <p>
+                Catalogs
+                <i class="right fas fa-angle-left"></i>
+              </p>
             </a>
+            <ul class="nav nav-treeview pl-2">
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-catalogs-list">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p data-i18n="catalogList">Catalog List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-add-catalog">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p data-i18n="addCatalogItem">Add Catalog Item</p>
+                </a>
+              </li>
+            </ul>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-add-catalog">
-              <i class="nav-icon fas fa-plus"></i>
-              <p data-i18n="addCatalogItem">Add Catalog Item</p>
+
+          <!-- Bible App Group -->
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-bible text-info"></i>
+              <p>
+                Bible Content
+                <i class="right fas fa-angle-left"></i>
+              </p>
             </a>
+            <ul class="nav nav-treeview pl-2">
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-categories">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p>Categories</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-stories">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p>Stories</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-audio-items">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p>Audio Items</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-products">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p>Products</p>
+                </a>
+              </li>
+            </ul>
           </li>
-          <!-- Category Nav Link -->
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-categories">
-              <i class="nav-icon fas fa-tags"></i>
-              <p>Categories</p>
+
+          <li class="nav-header text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 0.5rem 1rem;">System</li>
+
+          <!-- System Group -->
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cogs text-info"></i>
+              <p>
+                Settings & Users
+                <i class="right fas fa-angle-left"></i>
+              </p>
             </a>
-          </li>
-          <!-- Story Nav Link -->
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-stories">
-              <i class="nav-icon fas fa-book"></i>
-              <p>Stories</p>
-            </a>
-          </li>
-          <!-- Audio Item Nav Link -->
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-audio-items">
-              <i class="nav-icon fas fa-music"></i>
-              <p>Audio Items</p>
-            </a>
-          </li>
-          <!-- Product Nav Link -->
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-products">
-              <i class="nav-icon fas fa-shopping-cart"></i>
-              <p>Products</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-security">
-              <i class="nav-icon fas fa-shield-alt"></i>
-              <p data-i18n="securityShield">Security Shield</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-users">
-              <i class="nav-icon fas fa-users"></i>
-              <p data-i18n="users">Users</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-payments">
-              <i class="nav-icon fas fa-credit-card"></i>
-              <p data-i18n="payments">Payments</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="nav-notifications">
-              <i class="nav-icon fas fa-bell"></i>
-              <p data-i18n="notifications">Notifications</p>
-            </a>
+            <ul class="nav nav-treeview pl-2">
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-security">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p data-i18n="securityShield">Security Shield</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-users">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p data-i18n="users">Users</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-payments">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p data-i18n="payments">Payments</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="nav-notifications">
+                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
+                  <p data-i18n="notifications">Notifications</p>
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </nav>
@@ -884,7 +923,7 @@
     $('#catalogDescription').attr('placeholder', locales[lang].descriptionSummaryLabel || locales[lang].descriptionSummaryLabel);
 
     // Refresh Active Sidebar text
-    const activeText = $('.nav-sidebar .nav-link.active').find('p').attr('data-i18n');
+    const activeText = $('.nav-sidebar .nav-link.active[id]').find('p').attr('data-i18n');
     if (activeText && locales[lang][activeText]) {
       $('#pageTitle').text(locales[lang][activeText]);
       $('#breadcrumbActive').text(locales[lang][activeText]);
@@ -941,6 +980,10 @@
     // Update active nav-link
     $('.nav-sidebar .nav-link').removeClass('active');
     $(`#${navLinkId}`).addClass('active');
+    
+    // Auto-expand and highlight parent treeview if clicked a child item
+    const $childLink = $(`#${navLinkId}`);
+    $childLink.closest('.has-treeview').find('> .nav-link').addClass('active');
 
     // Update titles & breadcrumbs
     const activeText = $(`#${navLinkId}`).find('p').attr('data-i18n');
