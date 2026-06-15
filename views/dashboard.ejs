@@ -168,6 +168,34 @@
               <p data-i18n="addCatalogItem">Add Catalog Item</p>
             </a>
           </li>
+          <!-- Category Nav Link -->
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-categories">
+              <i class="nav-icon fas fa-tags"></i>
+              <p>Categories</p>
+            </a>
+          </li>
+          <!-- Story Nav Link -->
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-stories">
+              <i class="nav-icon fas fa-book"></i>
+              <p>Stories</p>
+            </a>
+          </li>
+          <!-- Audio Item Nav Link -->
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-audio-items">
+              <i class="nav-icon fas fa-music"></i>
+              <p>Audio Items</p>
+            </a>
+          </li>
+          <!-- Product Nav Link -->
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-products">
+              <i class="nav-icon fas fa-shopping-cart"></i>
+              <p>Products</p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="#" class="nav-link" id="nav-security">
               <i class="nav-icon fas fa-shield-alt"></i>
@@ -397,13 +425,144 @@
 
               </div>
               <!-- /.card-body -->
-
               <div class="card-footer bg-light d-flex justify-content-end">
                 <button type="submit" class="btn btn-success px-4 elevation-1" id="submitBtn">
                   <i class="fas fa-save mr-1"></i> <span data-i18n="saveUploadPublication">Save & Upload Publication</span>
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+
+        <!-- Section 3.1: Categories -->
+        <div class="content-section d-none" id="categories-section">
+          <div class="card card-warning card-outline">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h3 class="card-title font-weight-bold text-dark m-0">
+                <i class="fas fa-tags text-warning mr-1"></i> Categories
+              </h3>
+              <button class="btn btn-success btn-sm float-right" onclick="openAddCategoryModal()"><i class="fas fa-plus mr-1"></i> Add Category</button>
+            </div>
+            <div class="card-body">
+              <table id="categoriesTable" class="table table-bordered table-striped table-hover w-100">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">ID</th>
+                    <th>Title</th>
+                    <th>Subtitle</th>
+                    <th>Type</th>
+                    <th>Count</th>
+                    <th>Image URL</th>
+                    <th>Order</th>
+                    <th>Published</th>
+                    <th style="width: 150px; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="categoriesTableBody">
+                  <!-- Loaded via AJAX -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3.2: Stories -->
+        <div class="content-section d-none" id="stories-section">
+          <div class="card card-success card-outline">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h3 class="card-title font-weight-bold text-dark m-0">
+                <i class="fas fa-book text-success mr-1"></i> Stories
+              </h3>
+              <button class="btn btn-success btn-sm float-right" onclick="openAddStoryModal()"><i class="fas fa-plus mr-1"></i> Add Story</button>
+            </div>
+            <div class="card-body">
+              <table id="storiesTable" class="table table-bordered table-striped table-hover w-100">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">ID</th>
+                    <th>Title</th>
+                    <th>Slug</th>
+                    <th>Type</th>
+                    <th>Category ID</th>
+                    <th>Duration</th>
+                    <th>Image URL</th>
+                    <th>Locked</th>
+                    <th>Published</th>
+                    <th>Order</th>
+                    <th style="width: 150px; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="storiesTableBody">
+                  <!-- Loaded via AJAX -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3.3: Audio Items -->
+        <div class="content-section d-none" id="audio-items-section">
+          <div class="card card-primary card-outline">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h3 class="card-title font-weight-bold text-dark m-0">
+                <i class="fas fa-music text-primary mr-1"></i> Audio Items
+              </h3>
+              <button class="btn btn-success btn-sm float-right" onclick="openAddAudioItemModal()"><i class="fas fa-plus mr-1"></i> Add Audio Item</button>
+            </div>
+            <div class="card-body">
+              <table id="audioItemsTable" class="table table-bordered table-striped table-hover w-100">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">ID</th>
+                    <th>Title</th>
+                    <th>Slug</th>
+                    <th>Category</th>
+                    <th>Category ID</th>
+                    <th>Duration</th>
+                    <th>Audio URL</th>
+                    <th>Locked</th>
+                    <th>Published</th>
+                    <th>Order</th>
+                    <th style="width: 150px; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="audioItemsTableBody">
+                  <!-- Loaded via AJAX -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3.4: Products -->
+        <div class="content-section d-none" id="products-section">
+          <div class="card card-info card-outline">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h3 class="card-title font-weight-bold text-dark m-0">
+                <i class="fas fa-shopping-cart text-info mr-1"></i> Products (Store Items)
+              </h3>
+              <button class="btn btn-success btn-sm float-right" onclick="openAddProductModal()"><i class="fas fa-plus mr-1"></i> Add Product</button>
+            </div>
+            <div class="card-body">
+              <table id="productsTable" class="table table-bordered table-striped table-hover w-100">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Price String</th>
+                    <th>Image URL</th>
+                    <th>Duration</th>
+                    <th>Published</th>
+                    <th style="width: 150px; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                  <!-- Loaded via AJAX -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -788,6 +947,11 @@
     if (activeText && locales[currentLang] && locales[currentLang][activeText]) {
       $('#pageTitle').text(locales[currentLang][activeText]);
       $('#breadcrumbActive').text(locales[currentLang][activeText]);
+    } else {
+      // Fallback for custom tabs that aren't localized
+      const label = $(`#${navLinkId}`).find('p').text();
+      $('#pageTitle').text(label);
+      $('#breadcrumbActive').text(label);
     }
   }
 
@@ -866,6 +1030,26 @@
       e.preventDefault();
       showSection('add-catalog-section', 'nav-add-catalog');
     });
+    $('#nav-categories').click(function(e) {
+      e.preventDefault();
+      showSection('categories-section', 'nav-categories');
+      loadCategories();
+    });
+    $('#nav-stories').click(function(e) {
+      e.preventDefault();
+      showSection('stories-section', 'nav-stories');
+      loadStories();
+    });
+    $('#nav-audio-items').click(function(e) {
+      e.preventDefault();
+      showSection('audio-items-section', 'nav-audio-items');
+      loadAudioItems();
+    });
+    $('#nav-products').click(function(e) {
+      e.preventDefault();
+      showSection('products-section', 'nav-products');
+      loadProducts();
+    });
     $('#nav-security').click(function(e) {
       e.preventDefault();
       showSection('security-section', 'nav-security');
@@ -894,6 +1078,10 @@
       
       // Reload active tab data
       if ($('#nav-catalogs-list').hasClass('active')) loadCatalogs();
+      if ($('#nav-categories').hasClass('active')) loadCategories();
+      if ($('#nav-stories').hasClass('active')) loadStories();
+      if ($('#nav-audio-items').hasClass('active')) loadAudioItems();
+      if ($('#nav-products').hasClass('active')) loadProducts();
       if ($('#nav-users').hasClass('active')) loadUsers();
       if ($('#nav-payments').hasClass('active')) loadPayments();
       if ($('#nav-notifications').hasClass('active')) loadNotifications();
@@ -1098,6 +1286,410 @@
         }
       });
     });
+
+    // Categories Loading Functions
+    window.loadCategories = function() {
+      if ($.fn.DataTable.isDataTable('#categoriesTable')) {
+        $('#categoriesTable').DataTable().destroy();
+      }
+
+      $.ajax({
+        url: '/api/categories',
+        type: 'GET',
+        success: function(categories) {
+          let rows = '';
+          categories.forEach(c => {
+            rows += `
+              <tr>
+                <td><span class="badge badge-secondary">${c.id}</span></td>
+                <td><strong>${c.title || ''}</strong></td>
+                <td>${c.subtitle || ''}</td>
+                <td><span class="badge badge-info">${c.type || ''}</span></td>
+                <td>${c.count || 0}</td>
+                <td><code>${c.image || ''}</code></td>
+                <td>${c.orderIndex || 0}</td>
+                <td>${c.isPublished ? '<span class="badge badge-success">Yes</span>' : '<span class="badge badge-danger">No</span>'}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-info mr-1" onclick="openEditCategoryModal(${c.id}, '${escapeHtml(c.title)}', '${escapeHtml(c.subtitle)}', '${escapeHtml(c.type)}', ${c.count}, '${escapeHtml(c.image)}', ${c.orderIndex}, ${c.isPublished})"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteCategory(${c.id})"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            `;
+          });
+          $('#categoriesTableBody').html(rows);
+          $('#categoriesTable').DataTable({ "responsive": true, "autoWidth": false });
+        }
+      });
+    };
+
+    window.openAddCategoryModal = function() {
+      $('#categoryModalLabel').text('Add Category');
+      $('#categoryForm')[0].reset();
+      $('#categoryId').val('');
+      $('#categoryModal').modal('show');
+    };
+
+    window.openEditCategoryModal = function(id, title, subtitle, type, count, image, orderIndex, isPublished) {
+      $('#categoryModalLabel').text('Edit Category');
+      $('#categoryId').val(id);
+      $('#catTitle').val(title);
+      $('#catSubtitle').val(subtitle);
+      $('#catType').val(type);
+      $('#catCount').val(count);
+      $('#catImage').val(image);
+      $('#catOrderIndex').val(orderIndex);
+      $('#catIsPublished').val(isPublished ? 'true' : 'false');
+      $('#categoryModal').modal('show');
+    };
+
+    $('#categoryForm').submit(function(e) {
+      e.preventDefault();
+      const id = $('#categoryId').val();
+      const payload = {
+        title: $('#catTitle').val(),
+        subtitle: $('#catSubtitle').val(),
+        type: $('#catType').val(),
+        count: parseInt($('#catCount').val() || 0),
+        image: $('#catImage').val(),
+        orderIndex: parseInt($('#catOrderIndex').val() || 0),
+        isPublished: $('#catIsPublished').val() === 'true'
+      };
+
+      const url = id ? `/api/categories/${id}` : '/api/categories';
+      const type = id ? 'PUT' : 'POST';
+
+      $.ajax({
+        url,
+        type,
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function() {
+          $('#categoryModal').modal('hide');
+          loadCategories();
+        }
+      });
+    });
+
+    window.deleteCategory = function(id) {
+      if (!confirm('Are you sure you want to delete this category?')) return;
+      $.ajax({
+        url: `/api/categories/${id}`,
+        type: 'DELETE',
+        success: function() {
+          loadCategories();
+        }
+      });
+    };
+
+    // Stories Loading Functions
+    window.loadStories = function() {
+      if ($.fn.DataTable.isDataTable('#storiesTable')) {
+        $('#storiesTable').DataTable().destroy();
+      }
+
+      $.ajax({
+        url: '/api/stories',
+        type: 'GET',
+        success: function(stories) {
+          let rows = '';
+          stories.forEach(s => {
+            rows += `
+              <tr>
+                <td><span class="badge badge-secondary">${s.id}</span></td>
+                <td><strong>${s.title || ''}</strong></td>
+                <td><code>${s.slug || ''}</code></td>
+                <td>${s.type || ''}</td>
+                <td>${s.categoryId || ''}</td>
+                <td>${s.duration || ''} (${s.durationSeconds || 0}s)</td>
+                <td><code>${s.image || ''}</code></td>
+                <td>${s.isLocked ? '<span class="badge badge-warning">Locked</span>' : '<span class="badge badge-light">Free</span>'}</td>
+                <td>${s.isPublished ? '<span class="badge badge-success">Published</span>' : '<span class="badge badge-danger">Draft</span>'}</td>
+                <td>${s.orderIndex || 0}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-info mr-1" onclick="openEditStoryModal(${s.id}, '${escapeHtml(s.title)}', '${escapeHtml(s.slug)}', '${escapeHtml(s.type)}', '${s.categoryId || ''}', '${escapeHtml(s.duration)}', ${s.durationSeconds || 0}, '${escapeHtml(s.image)}', '${escapeHtml(s.contentText || '')}', '${escapeHtml(s.audioUrl || '')}', ${s.isLocked}, ${s.isPublished}, ${s.orderIndex || 0})"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteStory(${s.id})"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            `;
+          });
+          $('#storiesTableBody').html(rows);
+          $('#storiesTable').DataTable({ "responsive": true, "autoWidth": false });
+        }
+      });
+    };
+
+    window.openAddStoryModal = function() {
+      $('#storyModalLabel').text('Add Story');
+      $('#storyForm')[0].reset();
+      $('#storyId').val('');
+      $('#storyModal').modal('show');
+    };
+
+    window.openEditStoryModal = function(id, title, slug, type, categoryId, duration, durationSeconds, image, contentText, audioUrl, isLocked, isPublished, orderIndex) {
+      $('#storyModalLabel').text('Edit Story');
+      $('#storyId').val(id);
+      $('#storyTitle').val(title);
+      $('#storySlug').val(slug);
+      $('#storyType').val(type);
+      $('#storyCategoryId').val(categoryId);
+      $('#storyDuration').val(duration);
+      $('#storyDurationSeconds').val(durationSeconds);
+      $('#storyImage').val(image);
+      $('#storyContentText').val(contentText);
+      $('#storyAudioUrl').val(audioUrl);
+      $('#storyIsLocked').val(isLocked ? 'true' : 'false');
+      $('#storyIsPublished').val(isPublished ? 'true' : 'false');
+      $('#storyOrderIndex').val(orderIndex);
+      $('#storyModal').modal('show');
+    };
+
+    $('#storyForm').submit(function(e) {
+      e.preventDefault();
+      const id = $('#storyId').val();
+      const payload = {
+        title: $('#storyTitle').val(),
+        slug: $('#storySlug').val(),
+        type: $('#storyType').val(),
+        categoryId: $('#storyCategoryId').val() ? parseInt($('#storyCategoryId').val()) : null,
+        duration: $('#storyDuration').val(),
+        durationSeconds: parseInt($('#storyDurationSeconds').val() || 0),
+        image: $('#storyImage').val(),
+        contentText: $('#storyContentText').val(),
+        audioUrl: $('#storyAudioUrl').val(),
+        isLocked: $('#storyIsLocked').val() === 'true',
+        isPublished: $('#storyIsPublished').val() === 'true',
+        orderIndex: parseInt($('#storyOrderIndex').val() || 0)
+      };
+
+      const url = id ? `/api/stories/${id}` : '/api/stories';
+      const type = id ? 'PUT' : 'POST';
+
+      $.ajax({
+        url,
+        type,
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function() {
+          $('#storyModal').modal('hide');
+          loadStories();
+        }
+      });
+    });
+
+    window.deleteStory = function(id) {
+      if (!confirm('Are you sure you want to delete this story?')) return;
+      $.ajax({
+        url: `/api/stories/${id}`,
+        type: 'DELETE',
+        success: function() {
+          loadStories();
+        }
+      });
+    };
+
+    // Audio Items Loading Functions
+    window.loadAudioItems = function() {
+      if ($.fn.DataTable.isDataTable('#audioItemsTable')) {
+        $('#audioItemsTable').DataTable().destroy();
+      }
+
+      $.ajax({
+        url: '/api/audio-items',
+        type: 'GET',
+        success: function(items) {
+          let rows = '';
+          items.forEach(a => {
+            rows += `
+              <tr>
+                <td><span class="badge badge-secondary">${a.id}</span></td>
+                <td><strong>${a.title || ''}</strong></td>
+                <td><code>${a.slug || ''}</code></td>
+                <td>${a.category || ''}</td>
+                <td>${a.categoryId || ''}</td>
+                <td>${a.duration || ''} (${a.durationSeconds || 0}s)</td>
+                <td><code>${a.audioUrl || ''}</code></td>
+                <td>${a.isLocked ? '<span class="badge badge-warning">Locked</span>' : '<span class="badge badge-light">Free</span>'}</td>
+                <td>${a.isPublished ? '<span class="badge badge-success">Published</span>' : '<span class="badge badge-danger">Draft</span>'}</td>
+                <td>${a.orderIndex || 0}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-info mr-1" onclick="openEditAudioItemModal(${a.id}, '${escapeHtml(a.title)}', '${escapeHtml(a.slug)}', '${escapeHtml(a.category)}', '${a.categoryId || ''}', '${escapeHtml(a.duration)}', ${a.durationSeconds || 0}, '${escapeHtml(a.image)}', '${escapeHtml(a.audioUrl)}', '${escapeHtml(a.badgeColor || '')}', ${a.isLocked}, ${a.isPublished}, ${a.orderIndex || 0})"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteAudioItem(${a.id})"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            `;
+          });
+          $('#audioItemsTableBody').html(rows);
+          $('#audioItemsTable').DataTable({ "responsive": true, "autoWidth": false });
+        }
+      });
+    };
+
+    window.openAddAudioItemModal = function() {
+      $('#audioItemModalLabel').text('Add Audio Item');
+      $('#audioItemForm')[0].reset();
+      $('#audioItemId').val('');
+      $('#audioItemModal').modal('show');
+    };
+
+    window.openEditAudioItemModal = function(id, title, slug, category, categoryId, duration, durationSeconds, image, audioUrl, badgeColor, isLocked, isPublished, orderIndex) {
+      $('#audioItemModalLabel').text('Edit Audio Item');
+      $('#audioItemId').val(id);
+      $('#audioTitle').val(title);
+      $('#audioSlug').val(slug);
+      $('#audioCategory').val(category);
+      $('#audioCategoryId').val(categoryId);
+      $('#audioDuration').val(duration);
+      $('#audioDurationSeconds').val(durationSeconds);
+      $('#audioImage').val(image);
+      $('#audioUrlField').val(audioUrl);
+      $('#audioBadgeColor').val(badgeColor);
+      $('#audioIsLocked').val(isLocked ? 'true' : 'false');
+      $('#audioIsPublished').val(isPublished ? 'true' : 'false');
+      $('#audioOrderIndex').val(orderIndex);
+      $('#audioItemModal').modal('show');
+    };
+
+    $('#audioItemForm').submit(function(e) {
+      e.preventDefault();
+      const id = $('#audioItemId').val();
+      const payload = {
+        title: $('#audioTitle').val(),
+        slug: $('#audioSlug').val(),
+        category: $('#audioCategory').val(),
+        categoryId: $('#audioCategoryId').val() ? parseInt($('#audioCategoryId').val()) : null,
+        duration: $('#audioDuration').val(),
+        durationSeconds: parseInt($('#audioDurationSeconds').val() || 0),
+        image: $('#audioImage').val(),
+        audioUrl: $('#audioUrlField').val(),
+        badgeColor: $('#audioBadgeColor').val(),
+        isLocked: $('#audioIsLocked').val() === 'true',
+        isPublished: $('#audioIsPublished').val() === 'true',
+        orderIndex: parseInt($('#audioOrderIndex').val() || 0)
+      };
+
+      const url = id ? `/api/audio-items/${id}` : '/api/audio-items';
+      const type = id ? 'PUT' : 'POST';
+
+      $.ajax({
+        url,
+        type,
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function() {
+          $('#audioItemModal').modal('hide');
+          loadAudioItems();
+        }
+      });
+    });
+
+    window.deleteAudioItem = function(id) {
+      if (!confirm('Are you sure you want to delete this audio item?')) return;
+      $.ajax({
+        url: `/api/audio-items/${id}`,
+        type: 'DELETE',
+        success: function() {
+          loadAudioItems();
+        }
+      });
+    };
+
+    // Products Loading Functions
+    window.loadProducts = function() {
+      if ($.fn.DataTable.isDataTable('#productsTable')) {
+        $('#productsTable').DataTable().destroy();
+      }
+
+      $.ajax({
+        url: '/api/products',
+        type: 'GET',
+        success: function(products) {
+          let rows = '';
+          products.forEach(p => {
+            rows += `
+              <tr>
+                <td><span class="badge badge-secondary">${p.id}</span></td>
+                <td><strong>${p.title || ''}</strong></td>
+                <td><small>${p.description || ''}</small></td>
+                <td>$${p.price || 0}</td>
+                <td><code>${p.priceString || ''}</code></td>
+                <td><code>${p.image || ''}</code></td>
+                <td>${p.duration || ''} (${p.durationSeconds || 0}s)</td>
+                <td>${p.isPublished ? '<span class="badge badge-success">Published</span>' : '<span class="badge badge-danger">Draft</span>'}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-info mr-1" onclick="openEditProductModal(${p.id}, '${escapeHtml(p.title)}', '${escapeHtml(p.description)}', ${p.price}, '${escapeHtml(p.priceString)}', '${escapeHtml(p.image)}', '${escapeHtml(p.duration)}', ${p.durationSeconds || 0}, ${p.orderIndex || 0}, ${p.isPublished})"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            `;
+          });
+          $('#productsTableBody').html(rows);
+          $('#productsTable').DataTable({ "responsive": true, "autoWidth": false });
+        }
+      });
+    };
+
+    window.openAddProductModal = function() {
+      $('#productModalLabel').text('Add Product');
+      $('#productForm')[0].reset();
+      $('#productId').val('');
+      $('#productModal').modal('show');
+    };
+
+    window.openEditProductModal = function(id, title, description, price, priceString, image, duration, durationSeconds, orderIndex, isPublished) {
+      $('#productModalLabel').text('Edit Product');
+      $('#productId').val(id);
+      $('#prodTitle').val(title);
+      $('#prodDescription').val(description);
+      $('#prodPrice').val(price);
+      $('#prodPriceString').val(priceString);
+      $('#prodImage').val(image);
+      $('#prodDuration').val(duration);
+      $('#prodDurationSeconds').val(durationSeconds);
+      $('#prodOrderIndex').val(orderIndex);
+      $('#prodIsPublished').val(isPublished ? 'true' : 'false');
+      $('#productModal').modal('show');
+    };
+
+    $('#productForm').submit(function(e) {
+      e.preventDefault();
+      const id = $('#productId').val();
+      const payload = {
+        title: $('#prodTitle').val(),
+        description: $('#prodDescription').val(),
+        price: parseFloat($('#prodPrice').val() || 0),
+        priceString: $('#prodPriceString').val(),
+        image: $('#prodImage').val(),
+        duration: $('#prodDuration').val(),
+        durationSeconds: parseInt($('#prodDurationSeconds').val() || 0),
+        orderIndex: parseInt($('#prodOrderIndex').val() || 0),
+        isPublished: $('#prodIsPublished').val() === 'true'
+      };
+
+      const url = id ? `/api/products/${id}` : '/api/products';
+      const type = id ? 'PUT' : 'POST';
+
+      $.ajax({
+        url,
+        type,
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function() {
+          $('#productModal').modal('hide');
+          loadProducts();
+        }
+      });
+    });
+
+    window.deleteProduct = function(id) {
+      if (!confirm('Are you sure you want to delete this product?')) return;
+      $.ajax({
+        url: `/api/products/${id}`,
+        type: 'DELETE',
+        success: function() {
+          loadProducts();
+        }
+      });
+    };
 
     // Users Section Functions
     window.loadUsers = function() {
@@ -1444,6 +2036,316 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" data-i18n="close">Close</button>
           <button type="submit" class="btn btn-info" data-i18n="saveChanges">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Category Modal -->
+<div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title font-weight-bold text-dark" id="categoryModalLabel">Category Info</h5>
+        <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="categoryForm">
+        <input type="hidden" id="categoryId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="catTitle" class="font-weight-bold">Title *</label>
+            <input type="text" class="form-control" id="catTitle" required>
+          </div>
+          <div class="form-group">
+            <label for="catSubtitle" class="font-weight-bold">Subtitle</label>
+            <input type="text" class="form-control" id="catSubtitle">
+          </div>
+          <div class="form-group">
+            <label for="catType" class="font-weight-bold">Type *</label>
+            <input type="text" class="form-control" id="catType" placeholder="story, audio, etc." required>
+          </div>
+          <div class="form-group">
+            <label for="catCount" class="font-weight-bold">Count</label>
+            <input type="number" class="form-control" id="catCount" value="0">
+          </div>
+          <div class="form-group">
+            <label for="catImage" class="font-weight-bold">Image URL *</label>
+            <input type="text" class="form-control" id="catImage" placeholder="/uploads/... or absolute URL" required>
+          </div>
+          <div class="form-group">
+            <label for="catOrderIndex" class="font-weight-bold">Order Index</label>
+            <input type="number" class="form-control" id="catOrderIndex" value="0">
+          </div>
+          <div class="form-group">
+            <label for="catIsPublished" class="font-weight-bold">Is Published</label>
+            <select class="form-control" id="catIsPublished">
+              <option value="true" selected>Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-warning">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Story Modal -->
+<div class="modal fade" id="storyModal" tabindex="-1" role="dialog" aria-labelledby="storyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title font-weight-bold" id="storyModalLabel">Story Info</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="storyForm">
+        <input type="hidden" id="storyId">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="storyTitle" class="font-weight-bold">Title *</label>
+                <input type="text" class="form-control" id="storyTitle" required>
+              </div>
+              <div class="form-group">
+                <label for="storySlug" class="font-weight-bold">Slug *</label>
+                <input type="text" class="form-control" id="storySlug" required>
+              </div>
+              <div class="form-group">
+                <label for="storyType" class="font-weight-bold">Type *</label>
+                <input type="text" class="form-control" id="storyType" value="story" required>
+              </div>
+              <div class="form-group">
+                <label for="storyCategoryId" class="font-weight-bold">Category ID</label>
+                <input type="number" class="form-control" id="storyCategoryId">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="storyDuration" class="font-weight-bold">Duration String (e.g. 05:30)</label>
+                <input type="text" class="form-control" id="storyDuration">
+              </div>
+              <div class="form-group">
+                <label for="storyDurationSeconds" class="font-weight-bold">Duration Seconds</label>
+                <input type="number" class="form-control" id="storyDurationSeconds" value="0">
+              </div>
+              <div class="form-group">
+                <label for="storyImage" class="font-weight-bold">Image URL *</label>
+                <input type="text" class="form-control" id="storyImage" placeholder="/uploads/..." required>
+              </div>
+              <div class="form-group">
+                <label for="storyAudioUrl" class="font-weight-bold">Audio URL</label>
+                <input type="text" class="form-control" id="storyAudioUrl" placeholder="https://...">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="storyContentText" class="font-weight-bold">Story Text Content</label>
+                <textarea class="form-control" id="storyContentText" rows="4"></textarea>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="storyIsLocked" class="font-weight-bold">Locked (Premium)</label>
+                <select class="form-control" id="storyIsLocked">
+                  <option value="false" selected>Free</option>
+                  <option value="true">Locked</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="storyIsPublished" class="font-weight-bold">Published</label>
+                <select class="form-control" id="storyIsPublished">
+                  <option value="true" selected>Published</option>
+                  <option value="false">Draft</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="storyOrderIndex" class="font-weight-bold">Order Index</label>
+                <input type="number" class="form-control" id="storyOrderIndex" value="0">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Save Story</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Audio Item Modal -->
+<div class="modal fade" id="audioItemModal" tabindex="-1" role="dialog" aria-labelledby="audioItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title font-weight-bold" id="audioItemModalLabel">Audio Item Info</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="audioItemForm">
+        <input type="hidden" id="audioItemId">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="audioTitle" class="font-weight-bold">Title *</label>
+                <input type="text" class="form-control" id="audioTitle" required>
+              </div>
+              <div class="form-group">
+                <label for="audioSlug" class="font-weight-bold">Slug *</label>
+                <input type="text" class="form-control" id="audioSlug" required>
+              </div>
+              <div class="form-group">
+                <label for="audioCategory" class="font-weight-bold">Category Name *</label>
+                <input type="text" class="form-control" id="audioCategory" required>
+              </div>
+              <div class="form-group">
+                <label for="audioCategoryId" class="font-weight-bold">Category ID</label>
+                <input type="number" class="form-control" id="audioCategoryId">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="audioDuration" class="font-weight-bold">Duration String (e.g. 03:45)</label>
+                <input type="text" class="form-control" id="audioDuration">
+              </div>
+              <div class="form-group">
+                <label for="audioDurationSeconds" class="font-weight-bold">Duration Seconds</label>
+                <input type="number" class="form-control" id="audioDurationSeconds" value="0">
+              </div>
+              <div class="form-group">
+                <label for="audioImage" class="font-weight-bold">Image URL *</label>
+                <input type="text" class="form-control" id="audioImage" placeholder="/uploads/..." required>
+              </div>
+              <div class="form-group">
+                <label for="audioUrlField" class="font-weight-bold">Audio URL *</label>
+                <input type="text" class="form-control" id="audioUrlField" placeholder="https://..." required>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="audioBadgeColor" class="font-weight-bold">Badge Color</label>
+                <input type="text" class="form-control" id="audioBadgeColor" placeholder="#007bff">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="audioIsLocked" class="font-weight-bold">Locked (Premium)</label>
+                <select class="form-control" id="audioIsLocked">
+                  <option value="false" selected>Free</option>
+                  <option value="true">Locked</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="audioIsPublished" class="font-weight-bold">Published</label>
+                <select class="form-control" id="audioIsPublished">
+                  <option value="true" selected>Published</option>
+                  <option value="false">Draft</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="audioOrderIndex" class="font-weight-bold">Order Index</label>
+                <input type="number" class="form-control" id="audioOrderIndex" value="0">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save Audio Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Product Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title font-weight-bold" id="productModalLabel">Product Info</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="productForm">
+        <input type="hidden" id="productId">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="prodTitle" class="font-weight-bold">Title *</label>
+                <input type="text" class="form-control" id="prodTitle" required>
+              </div>
+              <div class="form-group">
+                <label for="prodPrice" class="font-weight-bold">Price ($) *</label>
+                <input type="number" step="0.01" class="form-control" id="prodPrice" required>
+              </div>
+              <div class="form-group">
+                <label for="prodPriceString" class="font-weight-bold">Price Display String (e.g. $4.99)</label>
+                <input type="text" class="form-control" id="prodPriceString">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="prodImage" class="font-weight-bold">Image URL *</label>
+                <input type="text" class="form-control" id="prodImage" placeholder="/uploads/..." required>
+              </div>
+              <div class="form-group">
+                <label for="prodDuration" class="font-weight-bold">Duration String (e.g. 1 Month)</label>
+                <input type="text" class="form-control" id="prodDuration">
+              </div>
+              <div class="form-group">
+                <label for="prodDurationSeconds" class="font-weight-bold">Duration Seconds</label>
+                <input type="number" class="form-control" id="prodDurationSeconds" value="0">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="prodDescription" class="font-weight-bold">Description</label>
+                <textarea class="form-control" id="prodDescription" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="prodOrderIndex" class="font-weight-bold">Order Index</label>
+                <input type="number" class="form-control" id="prodOrderIndex" value="0">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="prodIsPublished" class="font-weight-bold">Published</label>
+                <select class="form-control" id="prodIsPublished">
+                  <option value="true" selected>Published</option>
+                  <option value="false">Draft</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-info">Save Product</button>
         </div>
       </form>
     </div>

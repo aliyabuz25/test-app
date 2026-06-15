@@ -15,6 +15,10 @@ const path = require('path');
 const fs = require('fs');
 const authController = require('./controllers/AuthController');
 const catalogController = require('./controllers/CatalogController');
+const categoryController = require('./controllers/CategoryController');
+const storyController = require('./controllers/StoryController');
+const audioItemController = require('./controllers/AudioItemController');
+const productController = require('./controllers/ProductController');
 const upload = require('./middlewares/upload');
 const userModel = require('./models/User');
 const paymentModel = require('./models/Payment');
@@ -237,6 +241,30 @@ app.get('/api/locales', (req, res) => {
     res.status(500).json({ message: 'Locales could not be loaded.' });
   }
 });
+
+// Category REST API routes
+app.get('/api/categories', (req, res) => categoryController.getAll(req, res));
+app.post('/api/categories', (req, res) => categoryController.create(req, res));
+app.put('/api/categories/:id', (req, res) => categoryController.update(req, res));
+app.delete('/api/categories/:id', (req, res) => categoryController.delete(req, res));
+
+// Story REST API routes
+app.get('/api/stories', (req, res) => storyController.getAll(req, res));
+app.post('/api/stories', (req, res) => storyController.create(req, res));
+app.put('/api/stories/:id', (req, res) => storyController.update(req, res));
+app.delete('/api/stories/:id', (req, res) => storyController.delete(req, res));
+
+// AudioItem REST API routes
+app.get('/api/audio-items', (req, res) => audioItemController.getAll(req, res));
+app.post('/api/audio-items', (req, res) => audioItemController.create(req, res));
+app.put('/api/audio-items/:id', (req, res) => audioItemController.update(req, res));
+app.delete('/api/audio-items/:id', (req, res) => audioItemController.delete(req, res));
+
+// Product REST API routes
+app.get('/api/products', (req, res) => productController.getAll(req, res));
+app.post('/api/products', (req, res) => productController.create(req, res));
+app.put('/api/products/:id', (req, res) => productController.update(req, res));
+app.delete('/api/products/:id', (req, res) => productController.delete(req, res));
 
 // Catalog creation endpoint supporting multipart uploads for vertical & horizontal thumbnails
 app.post(
