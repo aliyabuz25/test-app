@@ -322,6 +322,10 @@ async function initDb() {
               ['Old Audio Testament', '32 stories', 32, 'https://cdn.kidsbiblestories.com/categories/cat-old-audio.jpg', 'audio', 3, new Date().toISOString()]);
             db.run("INSERT INTO categories (title, subtitle, count, image, type, orderIndex, isPublished, createdAt) VALUES (?, ?, ?, ?, ?, ?, 1, ?)",
               ['Bedtime Stories', '53 stories', 53, 'https://cdn.kidsbiblestories.com/categories/cat-bedtime.jpg', 'story', 4, new Date().toISOString()]);
+            db.run("INSERT INTO categories (title, subtitle, count, image, type, orderIndex, isPublished, createdAt) VALUES (?, ?, ?, ?, ?, ?, 1, ?)",
+              ['Bedtime Bible Stories', '10 stories', 10, 'https://cdn.kidsbiblestories.com/categories/cat-bedtime-bible.jpg', 'story', 5, new Date().toISOString()]);
+            db.run("INSERT INTO categories (title, subtitle, count, image, type, orderIndex, isPublished, createdAt) VALUES (?, ?, ?, ?, ?, ?, 1, ?)",
+              ['Songs of Praise', '15 songs', 15, 'https://cdn.kidsbiblestories.com/categories/cat-songs-praise.jpg', 'audio', 6, new Date().toISOString()]);
 
             // Seed Stories
             db.run("INSERT INTO stories (title, slug, type, categoryId, duration, durationSeconds, image, contentText, audioUrl, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -330,12 +334,22 @@ async function initDb() {
               ['Genesis Creation', 'genesis-creation', 'Old Testament', 1, '15 min', 900, 'https://cdn.kidsbiblestories.com/stories/covers/ot-genesis.jpg', 'In the beginning...', 'https://cdn.kidsbiblestories.com/audio/stories/ot-genesis.mp3', 0, 1, 2, new Date().toISOString()]);
             db.run("INSERT INTO stories (title, slug, type, categoryId, duration, durationSeconds, image, contentText, audioUrl, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
               ['Noah Ark', 'noah-ark', 'Old Testament', 1, '10 min', 600, 'https://cdn.kidsbiblestories.com/stories/covers/ot-noah.jpg', 'Build an ark...', 'https://cdn.kidsbiblestories.com/audio/stories/ot-noah.mp3', 1, 1, 3, new Date().toISOString()]);
+            db.run("INSERT INTO stories (title, slug, type, categoryId, duration, durationSeconds, image, contentText, audioUrl, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['David and Goliath', 'david-goliath-story', 'Old Testament', 1, '9 min', 540, 'https://cdn.kidsbiblestories.com/stories/covers/ot-david.jpg', 'The young shepherd David defeats the giant Goliath with faith and a sling.', 'https://cdn.kidsbiblestories.com/audio/stories/ot-david.mp3', 0, 1, 4, new Date().toISOString()]);
+            db.run("INSERT INTO stories (title, slug, type, categoryId, duration, durationSeconds, image, contentText, audioUrl, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['The Good Samaritan', 'good-samaritan', 'New Testament', 2, '7 min', 420, 'https://cdn.kidsbiblestories.com/stories/covers/nt-samaritan.jpg', 'Jesus teaches about loving our neighbors through the parable of the helpful Samaritan.', 'https://cdn.kidsbiblestories.com/audio/stories/nt-samaritan.mp3', 0, 1, 5, new Date().toISOString()]);
+            db.run("INSERT INTO stories (title, slug, type, categoryId, duration, durationSeconds, image, contentText, audioUrl, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['Daniel in the Lions\' Den', 'daniel-lions-den', 'Old Testament', 1, '11 min', 660, 'https://cdn.kidsbiblestories.com/stories/covers/ot-daniel.jpg', 'Daniel shows unwavering faithfulness and is miraculously saved from hungry lions.', 'https://cdn.kidsbiblestories.com/audio/stories/ot-daniel.mp3', 1, 1, 6, new Date().toISOString()]);
 
             // Seed Audio Items
             db.run("INSERT INTO audio_items (title, slug, category, categoryId, duration, durationSeconds, image, audioUrl, badgeColor, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
               ['2 Chronicles', '2-chronicles', 'Old Audio Testament', 3, '10 min', 600, 'https://cdn.kidsbiblestories.com/audio/covers/ot-2chronicles.jpg', 'https://cdn.kidsbiblestories.com/audio/files/ot-2chronicles.mp3', 'purple', 0, 1, 1, new Date().toISOString()]);
             db.run("INSERT INTO audio_items (title, slug, category, categoryId, duration, durationSeconds, image, audioUrl, badgeColor, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
               ['David and Goliath', 'david-goliath-audio', 'Old Audio Testament', 3, '8 min', 480, 'https://cdn.kidsbiblestories.com/audio/covers/ot-david.jpg', 'https://cdn.kidsbiblestories.com/audio/files/ot-david.mp3', 'orange', 1, 1, 2, new Date().toISOString()]);
+            db.run("INSERT INTO audio_items (title, slug, category, categoryId, duration, durationSeconds, image, audioUrl, badgeColor, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['Psalm 23', 'psalm-23', 'Old Audio Testament', 3, '4 min', 240, 'https://cdn.kidsbiblestories.com/audio/covers/psalm23.jpg', 'https://cdn.kidsbiblestories.com/audio/files/psalm23.mp3', 'blue', 0, 1, 3, new Date().toISOString()]);
+            db.run("INSERT INTO audio_items (title, slug, category, categoryId, duration, durationSeconds, image, audioUrl, badgeColor, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['The Nativity Song', 'nativity-song', 'Songs of Praise', 6, '3 min', 180, 'https://cdn.kidsbiblestories.com/audio/covers/nativity-song.jpg', 'https://cdn.kidsbiblestories.com/audio/files/nativity-song.mp3', 'green', 0, 1, 4, new Date().toISOString()]);
 
             // Seed Music Items
             db.run("INSERT INTO music_items (title, type, image, audioUrl, createdAt) VALUES (?, ?, ?, ?, ?)",
@@ -348,6 +362,14 @@ async function initDb() {
               ['Kids Bible Stories Book', 'Old Testament', '#9747ff', 'https://cdn.kidsbiblestories.com/products/ot-book.jpg', '25+', '3-12', '150', '$12.99', 'https://amazon.com/example-bible-book', 1, 1, new Date().toISOString()]);
             db.run("INSERT INTO products (title, category, catColor, image, stories, ages, pages, price, externalUrl, isAvailable, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
               ['New Testament Stories Book', 'New Testament', '#28a745', 'https://cdn.kidsbiblestories.com/products/nt-book.jpg', '20+', '3-12', '120', '$10.99', 'https://amazon.com/example-nt-book', 1, 2, new Date().toISOString()]);
+            db.run("INSERT INTO products (title, category, catColor, image, stories, ages, pages, price, externalUrl, isAvailable, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['Interactive Bible Trivia Card Game', 'Games', '#fd7e14', 'https://cdn.kidsbiblestories.com/products/trivia-game.jpg', 'N/A', '6-99', '100 cards', '$14.99', 'https://amazon.com/example-trivia-game', 1, 3, new Date().toISOString()]);
+            db.run("INSERT INTO products (title, category, catColor, image, stories, ages, pages, price, externalUrl, isAvailable, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['My First Illustrated Bible', 'Books', '#20c997', 'https://cdn.kidsbiblestories.com/products/illustrated-bible.jpg', '50+', '2-7', '220', '$19.99', 'https://amazon.com/example-illustrated-bible', 1, 4, new Date().toISOString()]);
+            db.run("INSERT INTO products (title, category, catColor, image, stories, ages, pages, price, externalUrl, isAvailable, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['David & Goliath Activity & Coloring Book', 'Activity Books', '#e83e8c', 'https://cdn.kidsbiblestories.com/products/coloring-book.jpg', '1', '3-8', '48', '$5.99', 'https://amazon.com/example-coloring-book', 1, 5, new Date().toISOString()]);
+            db.run("INSERT INTO products (title, category, catColor, image, stories, ages, pages, price, externalUrl, isAvailable, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              ['Noah\'s Ark 3D Wooden Puzzle', 'Toys', '#ffc107', 'https://cdn.kidsbiblestories.com/products/wooden-puzzle.jpg', '1', '5-10', '35 pcs', '$24.99', 'https://amazon.com/example-wooden-puzzle', 1, 6, new Date().toISOString()]);
 
             console.log('--- SQLITE DATABASE SEED COMPLETE ---');
           }
