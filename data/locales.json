@@ -81,7 +81,20 @@
     "notificationType": "Notification Type",
     "sentTo": "Sent To",
     "allUsers": "All Users",
-    "createNotification": "Create Notification"
+    "createNotification": "Create Notification",
+    "awsUploadPanel": "AWS Upload Panel",
+    "awsS3Bucket": "AWS S3 Bucket",
+    "awsAccessKeyId": "AWS Access Key ID",
+    "awsSecretAccessKey": "AWS Secret Access Key",
+    "awsRegion": "AWS Region",
+    "selectFile": "Select File",
+    "uploadToAws": "Upload to AWS",
+    "uploading": "Uploading...",
+    "s3Url": "S3 URL",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "awsUploadSettings": "AWS S3 Credentials & Settings",
+    "awsUploadDescription": "Upload any content directly to your AWS S3 bucket. Credentials will be securely sent to your Node.js backend. If left blank, server-side environment variables will be used."
   },
   "tr": {
     "home": "Anasayfa",
@@ -165,7 +178,20 @@
     "notificationType": "Bildirim Tipi",
     "sentTo": "Gönderilen",
     "allUsers": "Tüm Kullanıcılar",
-    "createNotification": "Bildirim Oluştur"
+    "createNotification": "Bildirim Oluştur",
+    "awsUploadPanel": "AWS Yükleme Paneli",
+    "awsS3Bucket": "AWS S3 Bucket İsmi",
+    "awsAccessKeyId": "AWS Access Key ID",
+    "awsSecretAccessKey": "AWS Secret Access Key",
+    "awsRegion": "AWS Bölgesi (Region)",
+    "selectFile": "Dosya Seçin",
+    "uploadToAws": "AWS'ye Yükle",
+    "uploading": "Yükleniyor...",
+    "s3Url": "S3 Bağlantısı (URL)",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı!",
+    "awsUploadSettings": "AWS S3 Bilgileri ve Ayarları",
+    "awsUploadDescription": "Herhangi bir dosyayı doğrudan AWS S3 sepetinize (bucket) yükleyin. Girilen bilgiler backend sunucusunda işlenir. Boş bırakılması durumunda sunucu çevre değişkenleri (.env) kullanılır."
   },
   "de": {
     "home": "Startseite",

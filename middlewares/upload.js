@@ -36,4 +36,11 @@ const upload = multer({
   fileFilter
 });
 
+const genericUpload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit for AWS S3 uploads
+});
+
+upload.genericUpload = genericUpload;
+
 module.exports = upload;

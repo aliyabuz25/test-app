@@ -1,0 +1,153 @@
+================================================================================
+KID BIBLE SERVICE - RAW API ENDPOINT USAGE GUIDE
+================================================================================
+
+All API requests must include the following User-Agent header:
+User-Agent: bible-appclient
+
+Base URL: http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com
+
+--------------------------------------------------------------------------------
+1. LOCALES ENDPOINT (Multi-language Translations Dictionary)
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/locales
+Headers:
+  User-Agent: bible-appclient
+
+Example curl request:
+curl -H "User-Agent: bible-appclient" \
+     http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/locales
+
+--------------------------------------------------------------------------------
+2. LOGIN ENDPOINT (Retrieve JWT Token)
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/login
+Headers:
+  Content-Type: application/json
+  User-Agent: bible-appclient
+Body (JSON):
+  {
+    "email": "your_email@example.com",
+    "password": "your_password"
+  }
+
+Example curl request:
+curl -X POST \
+     -H "Content-Type: application/json" \
+     -H "User-Agent: bible-appclient" \
+     -d '{"email":"your_email@example.com","password":"your_password"}' \
+     http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/login
+
+--------------------------------------------------------------------------------
+3. GET CATALOGS ENDPOINT (List Visual Publications)
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/catalogs
+Headers:
+  User-Agent: bible-appclient
+
+Example curl request:
+curl -H "User-Agent: bible-appclient" \
+     http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/catalogs
+
+--------------------------------------------------------------------------------
+4. POST CATALOGS ENDPOINT (Add New Visual Publication)
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/catalogs
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+  User-Agent: bible-appclient
+Body (Multipart / FormData):
+  name: "Publication Title"
+  description: "Publication Description"
+  verticalImage: <File Upload>
+  horizontalImage: <File Upload>
+
+Example curl request:
+curl -X POST \
+     -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+     -H "User-Agent: bible-appclient" \
+     -F "name=My Book Title" \
+     -F "description=My Book Description" \
+     -F "verticalImage=@/path/to/vertical.jpg" \
+     -F "horizontalImage=@/path/to/horizontal.jpg" \
+     http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/catalogs
+
+--------------------------------------------------------------------------------
+5. AWS S3 FILE UPLOAD ENDPOINT (Direct File Uploads)
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/aws/upload
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+  User-Agent: bible-appclient
+Body (Multipart / FormData):
+  file: <File Upload>
+  bucketName: (Optional) "custom-s3-bucket"
+  accessKeyId: (Optional) "AKIA..."
+  secretAccessKey: (Optional) "wJalr..."
+  region: (Optional) "us-east-1"
+
+Example curl request:
+curl -X POST \
+     -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+     -H "User-Agent: bible-appclient" \
+     -F "file=@/path/to/story.mp3" \
+     http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/aws/upload
+
+--------------------------------------------------------------------------------
+6. CREATE PURCHASE/PAYMENT ENDPOINT
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/payments
+Headers:
+  User-Agent: bible-appclient
+  Content-Type: application/json
+Body (JSON):
+  {
+    "uid": "user_or_device_unique_id",          <-- REQUIRED (Must be provided)
+    "userEmail": "customer@example.com",
+    "productId": "premium_yearly",
+    "amount": 49.99,
+    "currency": "USD",
+    "status": "completed",
+    "transactionId": "GPA.1234-5678-9012-34567",
+    "uuid": "device_uuid_value",
+    "subscriptionEndDate": "2027-06-16T23:59:59.000Z",
+    "ip": "1.2.3.4",                              <-- Optional (auto-detected if blank)
+    "location": "Istanbul, Turkey"                <-- Optional
+  }
+
+Example curl request:
+curl -X POST \
+     -H "Content-Type: application/json" \
+     -H "User-Agent: bible-appclient" \
+     -d '{"uid":"user_1234","userEmail":"test@example.com","productId":"premium_yearly","amount":49.99,"currency":"USD","status":"completed","transactionId":"GPA.1111","uuid":"some-device-uuid","subscriptionEndDate":"2027-06-16T23:59:59.000Z"}' \
+     http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/payments
+
+--------------------------------------------------------------------------------
+7. CHECK SUBSCRIPTION ENDPOINT (Verifies status, returns "exhausted" if expired)
+--------------------------------------------------------------------------------
+Method: GET or POST
+URL: http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/subscription/check
+Headers:
+  User-Agent: bible-appclient
+Query parameters (for GET) or JSON body (for POST):
+  uid / userId / uuid: The ID or UUID to check subscription status for.
+
+Example GET curl request:
+curl -H "User-Agent: bible-appclient" \
+     "http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/subscription/check?uid=user_1234"
+
+Example POST curl request:
+curl -X POST \
+     -H "Content-Type: application/json" \
+     -H "User-Agent: bible-appclient" \
+     -d '{"uid":"user_1234"}' \
+     http://ec2-16-171-22-191.eu-north-1.compute.amazonaws.com/api/subscription/check
+
+Response status is "active" if valid/active, or "exhausted" if expired or not found.
+================================================================================

@@ -93,9 +93,24 @@ async function initDb() {
             currency TEXT NOT NULL,
             status TEXT NOT NULL,
             transactionId TEXT NOT NULL,
-            createdAt TEXT NOT NULL
+            createdAt TEXT NOT NULL,
+            uuid TEXT,
+            subscriptionEndDate TEXT,
+            ip TEXT,
+            location TEXT
           )
         `);
+
+        // Safely alter existing payments table if columns are missing
+        const alterPaymentColumns = [
+          "uuid TEXT DEFAULT NULL",
+          "subscriptionEndDate TEXT DEFAULT NULL",
+          "ip TEXT DEFAULT NULL",
+          "location TEXT DEFAULT NULL"
+        ];
+        for (const col of alterPaymentColumns) {
+          db.run(`ALTER TABLE payments ADD COLUMN ${col}`, [], () => {});
+        }
 
         db.run(`
           CREATE TABLE IF NOT EXISTS notifications (
@@ -268,6 +283,28 @@ async function initDb() {
         // Check if users exist to seed
         db.get("SELECT COUNT(*) as count FROM users", async (err, row) => {
           if (err) return reject(err);
+
+          // Helper to ensure the specific user exists
+          const ensureSpecificUser = async () => {
+            return new Promise((resUser) => {
+              db.get("SELECT * FROM users WHERE email = 'ali.valizada@octotech.az'", async (err, userRow) => {
+                if (!err && !userRow) {
+                  const hash = await bcrypt.hash('Initial_123!', 10);
+                  db.run(
+                    "INSERT INTO users (firstName, lastName, email, phoneNumber, password, createdAt, isVerified, avatarId, subscriptionStatus) VALUES (?, ?, ?, ?, ?, ?, 1, 'avatar_05', 'active')",
+                    ['Ali', 'Valizada', 'ali.valizada@octotech.az', '5550000001', hash, new Date().toISOString()],
+                    (err) => {
+                      if (!err) console.log('--- SEEDED SPECIFIC USER ali.valizada@octotech.az ---');
+                      resUser();
+                    }
+                  );
+                } else {
+                  resUser();
+                }
+              });
+            });
+          };
+
           if (row.count === 0) {
             console.log('--- SEEDING SQLITE DATABASE ---');
             
@@ -370,13 +407,15 @@ async function initDb() {
               ['David & Goliath Activity & Coloring Book', 'Activity Books', '#e83e8c', 'https://cdn.kidsbiblestories.com/products/coloring-book.jpg', '1', '3-8', '48', '$5.99', 'https://amazon.com/example-coloring-book', 1, 5, new Date().toISOString()]);
             db.run("INSERT INTO products (title, category, catColor, image, stories, ages, pages, price, externalUrl, isAvailable, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
               ['Noah\'s Ark 3D Wooden Puzzle', 'Toys', '#ffc107', 'https://cdn.kidsbiblestories.com/products/wooden-puzzle.jpg', '1', '5-10', '35 pcs', '$24.99', 'https://amazon.com/example-wooden-puzzle', 1, 6, new Date().toISOString()],
-              (err) => {
+              async (err) => {
                 if (err) return reject(err);
+                await ensureSpecificUser();
                 console.log('--- SQLITE DATABASE SEED COMPLETE ---');
                 resolve();
               }
             );
           } else {
+            await ensureSpecificUser();
             resolve();
           }
         });

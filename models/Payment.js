@@ -11,9 +11,9 @@ class Payment {
     }
   }
 
-  async create({ userId, userEmail, productId, amount, currency, status, transactionId }) {
+  async create({ userId, userEmail, productId, amount, currency, status, transactionId, uuid, subscriptionEndDate, ip, location }) {
     try {
-      const uId = parseInt(userId) || 0;
+      const uId = userId !== undefined && userId !== null ? String(userId) : '0';
       const email = userEmail || 'unknown@example.com';
       const prodId = productId || 'unknown_product';
       const amt = parseFloat(amount) || 0.0;
@@ -21,10 +21,14 @@ class Payment {
       const stat = status || 'pending';
       const txId = transactionId || `TXN_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
       const createdAt = new Date().toISOString();
+      const subEndDate = subscriptionEndDate || null;
+      const clientIp = ip || null;
+      const clientLoc = location || null;
+      const deviceUuid = uuid || null;
 
       const result = await db.run(
-        "INSERT INTO payments (userId, userEmail, productId, amount, currency, status, transactionId, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        [uId, email, prodId, amt, curr, stat, txId, createdAt]
+        "INSERT INTO payments (userId, userEmail, productId, amount, currency, status, transactionId, createdAt, uuid, subscriptionEndDate, ip, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [uId, email, prodId, amt, curr, stat, txId, createdAt, deviceUuid, subEndDate, clientIp, clientLoc]
       );
 
       return {
@@ -36,7 +40,11 @@ class Payment {
         currency: curr,
         status: stat,
         transactionId: txId,
-        createdAt
+        createdAt,
+        uuid: deviceUuid,
+        subscriptionEndDate: subEndDate,
+        ip: clientIp,
+        location: clientLoc
       };
     } catch (err) {
       console.error(err);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BibleCMS | Admin Console</title>
+  <title>KidBibleService | Admin Console</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -99,12 +99,12 @@
     }
     /* Nav items styling */
     .nav-sidebar .nav-item {
-      margin: 4px 8px !important;
+      margin: 2px 8px !important;
     }
     .nav-sidebar .nav-link {
       border-radius: 6px !important;
       color: #3f3f46 !important;
-      font-size: 14px !important;
+      font-size: 13.5px !important;
       font-weight: 500 !important;
       padding: 8px 12px !important;
       display: flex !important;
@@ -113,7 +113,7 @@
     }
     .nav-sidebar .nav-link i {
       color: #71717a !important;
-      font-size: 15px !important;
+      font-size: 14px !important;
       width: 20px !important;
       margin-right: 10px !important;
       display: flex !important;
@@ -122,11 +122,11 @@
     }
     /* Active Link state */
     .nav-sidebar .nav-link.active {
-      background-color: #f4f4f5 !important;
-      color: #09090b !important;
+      background-color: #18181b !important;
+      color: #ffffff !important;
     }
     .nav-sidebar .nav-link.active i {
-      color: #09090b !important;
+      color: #ffffff !important;
     }
     /* Hover state */
     .nav-sidebar .nav-link:hover:not(.active) {
@@ -139,36 +139,12 @@
     /* Sidebar Headers */
     .nav-sidebar .nav-header {
       color: #71717a !important;
-      font-size: 11px !important;
+      font-size: 10.5px !important;
       font-weight: 600 !important;
       text-transform: uppercase !important;
       letter-spacing: 0.05em !important;
-      padding: 16px 12px 6px 12px !important;
-    }
-    /* Treeview style adjustment */
-    .nav-sidebar .menu-open > .nav-link {
-      background-color: transparent !important;
-      color: #09090b !important;
-    }
-    .nav-sidebar .menu-open > .nav-link.active {
-      background-color: #f4f4f5 !important;
-    }
-    /* Submenus layout (treeview children) */
-    .nav-treeview {
-      padding-left: 10px !important;
-    }
-    .nav-treeview .nav-link {
-      padding: 6px 12px !important;
-      font-size: 13.5px !important;
-      color: #71717a !important;
-    }
-    .nav-treeview .nav-link.active {
-      background-color: #f4f4f5 !important;
-      color: #09090b !important;
-    }
-    .nav-treeview .nav-link:hover:not(.active) {
-      background-color: #f4f4f5 !important;
-      color: #09090b !important;
+      padding: 12px 12px 4px 12px !important;
+      margin-top: 8px !important;
     }
     /* Light style sidebar toggle / brand icon update */
     .brand-link i {
@@ -504,302 +480,7 @@
       font-size: 13px !important;
     }
 
-    /* Transition for smooth theme change */
-    body, 
-    .content-wrapper, 
-    .main-header.navbar, 
-    .main-sidebar, 
-    .brand-link, 
-    .card, 
-    .card-header, 
-    .card-body, 
-    .card-footer, 
-    .small-box, 
-    .btn, 
-    .form-control, 
-    select.form-control, 
-    textarea.form-control, 
-    table.table, 
-    table.table th, 
-    table.table td, 
-    .modal-content, 
-    .modal-header, 
-    .modal-footer, 
-    .main-footer, 
-    .nav-link, 
-    .brand-text, 
-    .nav-header {
-      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease !important;
-    }
-
-    /* Dark Mode styles */
-    body.dark-mode {
-      background-color: #09090b !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .content-wrapper {
-      background-color: #09090b !important;
-    }
-    body.dark-mode .main-header.navbar {
-      background-color: #09090b !important;
-      border-bottom: 1px solid #27272a !important;
-    }
-    body.dark-mode .main-header.navbar .nav-link {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .main-header.navbar .nav-link:hover {
-      color: #fafafa !important;
-    }
-    body.dark-mode .main-header.navbar #lang-btn,
-    body.dark-mode .main-header.navbar #themeToggleBtn {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .main-header.navbar #lang-btn:hover,
-    body.dark-mode .main-header.navbar #themeToggleBtn:hover {
-      color: #fafafa !important;
-    }
-    body.dark-mode #activeLangFlag + span {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .main-header.navbar .dropdown-menu {
-      background-color: #09090b !important;
-      border: 1px solid #27272a !important;
-    }
-    body.dark-mode .main-header.navbar .dropdown-item {
-      color: #fafafa !important;
-      background-color: transparent !important;
-    }
-    body.dark-mode .main-header.navbar .dropdown-item:hover,
-    body.dark-mode .main-header.navbar .dropdown-item.active {
-      background-color: #27272a !important;
-    }
-    body.dark-mode .main-sidebar {
-      background-color: #09090b !important;
-      border-right: 1px solid #27272a !important;
-    }
-    body.dark-mode .brand-link {
-      background-color: #09090b !important;
-      border-bottom: 1px solid #27272a !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .brand-link i {
-      color: #fafafa !important;
-    }
-    body.dark-mode .brand-text {
-      color: #fafafa !important;
-    }
-    body.dark-mode .sidebar .nav-link {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .sidebar .nav-link:hover:not(.active),
-    body.dark-mode .sidebar .nav-link.active {
-      background-color: #27272a !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .sidebar .nav-header {
-      color: #71717a !important;
-    }
-    body.dark-mode .sidebar .nav-treeview .nav-link {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .sidebar .nav-treeview .nav-link.active,
-    body.dark-mode .sidebar .nav-treeview .nav-link:hover:not(.active) {
-      background-color: #27272a !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .card {
-      background-color: #18181b !important;
-      border: 1px solid #27272a !important;
-    }
-    body.dark-mode .card-primary, 
-    body.dark-mode .card-info, 
-    body.dark-mode .card-success, 
-    body.dark-mode .card-warning, 
-    body.dark-mode .card-outline, 
-    body.dark-mode .card-danger {
-      border-top: 1px solid #27272a !important;
-    }
-    body.dark-mode .card-header {
-      background-color: #18181b !important;
-      border-bottom: 1px solid #27272a !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .card-title {
-      color: #fafafa !important;
-    }
-    body.dark-mode .card-body {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .card-footer {
-      background-color: #18181b !important;
-      border-top: 1px solid #27272a !important;
-    }
-    body.dark-mode .small-box {
-      background-color: #18181b !important;
-      border: 1px solid #27272a !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .small-box h3 {
-      color: #fafafa !important;
-    }
-    body.dark-mode .small-box p {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .small-box .small-box-footer {
-      color: #fafafa !important;
-      border-top: 1px solid #27272a !important;
-    }
-    body.dark-mode .small-box .small-box-footer:hover {
-      color: #ffffff !important;
-    }
-    body.dark-mode .btn-primary, 
-    body.dark-mode .btn-info, 
-    body.dark-mode .btn-success {
-      background-color: #fafafa !important;
-      color: #09090b !important;
-      border: 1px solid #fafafa !important;
-    }
-    body.dark-mode .btn-primary:hover, 
-    body.dark-mode .btn-info:hover, 
-    body.dark-mode .btn-success:hover {
-      background-color: #e4e4e7 !important;
-      border-color: #e4e4e7 !important;
-      color: #09090b !important;
-    }
-    body.dark-mode .btn-outline-secondary, 
-    body.dark-mode .btn-secondary, 
-    body.dark-mode .btn-default {
-      background-color: #18181b !important;
-      color: #fafafa !important;
-      border: 1px solid #27272a !important;
-    }
-    body.dark-mode .btn-outline-secondary:hover, 
-    body.dark-mode .btn-secondary:hover, 
-    body.dark-mode .btn-default:hover {
-      background-color: #27272a !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .form-control, 
-    body.dark-mode select.form-control, 
-    body.dark-mode textarea.form-control {
-      background-color: #18181b !important;
-      border: 1px solid #27272a !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .form-control:focus, 
-    body.dark-mode select.form-control:focus, 
-    body.dark-mode textarea.form-control:focus {
-      border-color: #fafafa !important;
-      box-shadow: 0 0 0 2px rgba(250, 250, 250, 0.1) !important;
-    }
-    body.dark-mode table.table-bordered {
-      border: 1px solid #27272a !important;
-    }
-    body.dark-mode table.table-bordered th, 
-    body.dark-mode table.table-bordered td {
-      border: 1px solid #27272a !important;
-    }
-    body.dark-mode table.table th {
-      background-color: #18181b !important;
-      color: #a1a1aa !important;
-    }
-    body.dark-mode table.table td {
-      color: #fafafa !important;
-    }
-    body.dark-mode table.table-striped tbody tr:nth-of-type(odd) {
-      background-color: #18181b !important;
-    }
-    body.dark-mode table.table-hover tbody tr:hover {
-      background-color: #27272a !important;
-    }
-    body.dark-mode .badge-info {
-      background-color: #27272a !important;
-      color: #fafafa !important;
-      border: 1px solid #3f3f46 !important;
-    }
-    body.dark-mode .badge-success {
-      background-color: #064e3b !important;
-      color: #34d399 !important;
-      border: 1px solid #065f46 !important;
-    }
-    body.dark-mode .badge-warning {
-      background-color: #78350f !important;
-      color: #fbbf24 !important;
-      border: 1px solid #92400e !important;
-    }
-    body.dark-mode .badge-danger {
-      background-color: #7f1d1d !important;
-      color: #fca5a5 !important;
-      border: 1px solid #991b1b !important;
-    }
-    body.dark-mode .modal-content {
-      background-color: #18181b !important;
-      border: 1px solid #27272a !important;
-    }
-    body.dark-mode .modal-header {
-      border-bottom: 1px solid #27272a !important;
-      background-color: #18181b !important;
-    }
-    body.dark-mode .modal-header.bg-primary,
-    body.dark-mode .modal-header.bg-info,
-    body.dark-mode .modal-header.bg-warning,
-    body.dark-mode .modal-header.bg-success,
-    body.dark-mode .modal-header.bg-danger {
-      background-color: #18181b !important;
-      border-bottom: 1px solid #27272a !important;
-    }
-    body.dark-mode .modal-title {
-      color: #fafafa !important;
-    }
-    body.dark-mode .modal-footer {
-      border-top: 1px solid #27272a !important;
-      background-color: #18181b !important;
-    }
-    body.dark-mode .modal-body {
-      background-color: #18181b !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .modal-body label {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .dataTables_wrapper .dataTables_paginate .paginate_button {
-      background-color: #18181b !important;
-      border: 1px solid #27272a !important;
-      color: #fafafa !important;
-    }
-    body.dark-mode .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
-    body.dark-mode .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-      background-color: #fafafa !important;
-      border-color: #fafafa !important;
-      color: #09090b !important;
-    }
-    body.dark-mode .dataTables_wrapper .dataTables_info {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .dataTables_wrapper .dataTables_length {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .dataTables_wrapper .dataTables_filter {
-      color: #a1a1aa !important;
-    }
-    body.dark-mode .main-footer {
-      background-color: #09090b !important;
-      border-top: 1px solid #27272a !important;
-      color: #71717a !important;
-    }
   </style>
-  <script>
-    // Immediate Theme Initialization to avoid flash of light theme
-    (function() {
-      const storedTheme = localStorage.getItem('theme');
-      if (storedTheme === 'dark') {
-        document.documentElement.classList.add('dark-mode');
-        document.addEventListener('DOMContentLoaded', function() {
-          document.body.classList.add('dark-mode');
-        });
-      }
-    })();
-  </script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -811,22 +492,10 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link" onclick="$('#nav-stats').trigger('click'); return false;" data-i18n="home">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link" onclick="$('#nav-catalogs-list').trigger('click'); return false;" data-i18n="catalog">Catalog</a>
-      </li>
     </ul>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto align-items-center">
-      <!-- Theme Toggle Menu -->
-      <li class="nav-item mr-2">
-        <a class="nav-link d-flex align-items-center justify-content-center" href="#" id="themeToggleBtn" style="padding: 0.5rem; cursor: pointer; border-radius: 6px; width: 36px; height: 36px; color: #71717a !important;">
-          <i class="fas fa-moon" id="themeToggleIcon" style="font-size: 16px; transition: transform 0.3s ease;"></i>
-        </a>
-      </li>
       <!-- Language Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link font-weight-bold d-flex align-items-center" data-toggle="dropdown" href="#" style="color: #495057;">
@@ -889,14 +558,14 @@
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
       <i class="fas fa-bible text-info ml-3 mr-2" style="font-size: 20px;"></i>
-      <span class="brand-text font-weight-light"><b>Bible</b>CMS</span>
+      <span class="brand-text font-weight-light"><b>KidBible</b>Service</span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
           <li class="nav-item">
             <a href="#" class="nav-link active" id="nav-stats">
               <i class="nav-icon fas fa-tachometer-alt text-info"></i>
@@ -904,107 +573,76 @@
             </a>
           </li>
 
-          <li class="nav-header text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 0.5rem 1rem;">Management</li>
-
-          <!-- Catalog Group -->
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-layer-group text-info"></i>
-              <p>
-                Catalogs
-                <i class="right fas fa-angle-left"></i>
-              </p>
+          <li class="nav-header text-uppercase text-muted">Catalogs</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-catalogs-list">
+              <i class="nav-icon fas fa-list text-info"></i>
+              <p data-i18n="catalogList">Catalog List</p>
             </a>
-            <ul class="nav nav-treeview pl-2">
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-catalogs-list">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p data-i18n="catalogList">Catalog List</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-add-catalog">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p data-i18n="addCatalogItem">Add Catalog Item</p>
-                </a>
-              </li>
-            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-add-catalog">
+              <i class="nav-icon fas fa-plus-circle text-info"></i>
+              <p data-i18n="addCatalogItem">Add Catalog Item</p>
+            </a>
           </li>
 
-          <!-- Bible App Group -->
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-bible text-info"></i>
-              <p>
-                Bible Content
-                <i class="right fas fa-angle-left"></i>
-              </p>
+          <li class="nav-header text-uppercase text-muted">Bible Content</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-categories">
+              <i class="nav-icon fas fa-tags text-info"></i>
+              <p>Categories</p>
             </a>
-            <ul class="nav nav-treeview pl-2">
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-categories">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p>Categories</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-stories">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p>Stories</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-audio-items">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p>Audio Items</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-products">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p>Products</p>
-                </a>
-              </li>
-            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-stories">
+              <i class="nav-icon fas fa-book text-info"></i>
+              <p>Stories</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-audio-items">
+              <i class="nav-icon fas fa-music text-info"></i>
+              <p>Audio Items</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-products">
+              <i class="nav-icon fas fa-shopping-cart text-info"></i>
+              <p>Products</p>
+            </a>
           </li>
 
-          <li class="nav-header text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 0.5rem 1rem;">System</li>
-
-          <!-- System Group -->
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-cogs text-info"></i>
-              <p>
-                Settings & Users
-                <i class="right fas fa-angle-left"></i>
-              </p>
+          <li class="nav-header text-uppercase text-muted">System</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-security">
+              <i class="nav-icon fas fa-shield-alt text-info"></i>
+              <p data-i18n="securityShield">Security Shield</p>
             </a>
-            <ul class="nav nav-treeview pl-2">
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-security">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p data-i18n="securityShield">Security Shield</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-users">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p data-i18n="users">Users</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-payments">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p data-i18n="payments">Payments</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link" id="nav-notifications">
-                  <i class="far fa-circle nav-icon" style="font-size: 12px;"></i>
-                  <p data-i18n="notifications">Notifications</p>
-                </a>
-              </li>
-            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-users">
+              <i class="nav-icon fas fa-users text-info"></i>
+              <p data-i18n="users">Users</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-payments">
+              <i class="nav-icon fas fa-credit-card text-info"></i>
+              <p data-i18n="payments">Payments</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-notifications">
+              <i class="nav-icon fas fa-bell text-info"></i>
+              <p data-i18n="notifications">Notifications</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="nav-aws-upload">
+              <i class="nav-icon fas fa-cloud-upload-alt text-info"></i>
+              <p data-i18n="awsUploadPanel">AWS Upload Panel</p>
+            </a>
           </li>
         </ul>
       </nav>
@@ -1039,7 +677,7 @@
         
         <!-- Section 1: Stats Overview -->
         <div class="content-section" id="stats-section">
-          <div class="row">
+          <div class="row mb-4">
             <div class="col-lg-3 col-6">
               <div class="small-box bg-info">
                 <div class="inner">
@@ -1091,7 +729,7 @@
           </div>
 
           <!-- Welcome Jumbotron Card -->
-          <div class="card card-primary card-outline">
+          <div class="card card-primary card-outline mt-4">
             <div class="card-header d-flex align-items-center">
               <i class="fas fa-info-circle text-info mr-2" style="font-size: 18px;"></i>
               <h5 class="m-0 font-weight-bold" data-i18n="welcomeTitle">Visual Catalog System</h5>
@@ -1611,6 +1249,94 @@
           </div>
         </div>
 
+        <!-- Section 8: AWS Upload Panel -->
+        <div class="content-section d-none" id="aws-upload-section">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="card card-info">
+                <div class="card-header bg-info">
+                  <h3 class="card-title font-weight-bold text-white">
+                    <i class="fas fa-cog mr-1"></i> <span data-i18n="awsUploadSettings">AWS S3 Credentials & Settings</span>
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <p class="text-muted small" data-i18n="awsUploadDescription">
+                    Upload any content directly to your AWS S3 bucket. Credentials will be securely sent to your Node.js backend. If left blank, server-side environment variables will be used.
+                  </p>
+                  <hr>
+                  <div class="form-group">
+                    <label for="awsS3BucketInput" data-i18n="awsS3Bucket">AWS S3 Bucket</label>
+                    <input type="text" id="awsS3BucketInput" class="form-control" placeholder="e.g. my-s3-bucket">
+                  </div>
+                  <div class="form-group">
+                    <label for="awsAccessKeyIdInput" data-i18n="awsAccessKeyId">AWS Access Key ID</label>
+                    <input type="text" id="awsAccessKeyIdInput" class="form-control" placeholder="AKIA...">
+                  </div>
+                  <div class="form-group">
+                    <label for="awsSecretAccessKeyInput" data-i18n="awsSecretAccessKey">AWS Secret Access Key</label>
+                    <input type="password" id="awsSecretAccessKeyInput" class="form-control" placeholder="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY">
+                  </div>
+                  <div class="form-group">
+                    <label for="awsRegionInput" data-i18n="awsRegion">AWS Region</label>
+                    <input type="text" id="awsRegionInput" class="form-control" value="us-east-1" placeholder="us-east-1">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-7">
+              <div class="card card-primary">
+                <div class="card-header bg-primary">
+                  <h3 class="card-title font-weight-bold text-white">
+                    <i class="fas fa-cloud-upload-alt mr-1"></i> <span data-i18n="awsUploadPanel">AWS Upload Panel</span>
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <div id="aws-upload-alert"></div>
+                  
+                  <form id="awsUploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                      <label for="awsFileInput" data-i18n="selectFile">Select File</label>
+                      <div class="input-group">
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="awsFileInput" required>
+                          <label class="custom-file-label" for="awsFileInput" id="awsFileLabel" data-i18n="chooseFile">Choose file...</label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block font-weight-bold" id="awsUploadSubmitBtn">
+                      <i class="fas fa-upload mr-1"></i> <span data-i18n="uploadToAws">Upload to AWS</span>
+                    </button>
+                  </form>
+                  
+                  <div class="progress mt-4" style="height: 25px; display: none;" id="awsProgressContainer">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="awsProgressBar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                  </div>
+                  
+                  <div class="mt-4" id="awsResultContainer" style="display: none;">
+                    <div class="alert alert-success">
+                      <h5 class="font-weight-bold"><i class="icon fas fa-check"></i> <span data-i18n="uploadSuccessful">Upload Successful!</span></h5>
+                      <div class="form-group">
+                        <label for="awsResultUrl" data-i18n="s3Url">S3 URL</label>
+                        <div class="input-group">
+                          <input type="text" id="awsResultUrl" class="form-control" readonly>
+                          <div class="input-group-append">
+                            <button class="btn btn-info" type="button" id="copyAwsUrlBtn">
+                              <i class="far fa-copy"></i> <span data-i18n="copy">Copy</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
     <!-- /.content -->
@@ -1620,9 +1346,9 @@
   <!-- Main Footer -->
   <footer class="main-footer">
     <div class="float-right d-none d-sm-inline">
-      BibleCMS v1.0.0
+      KidBibleService v1.0.0
     </div>
-    <strong>Copyright &copy; 2026 <a href="#" class="text-info">BibleCMS</a>.</strong> <span data-i18n="welcomeTitle">Visual Catalog System</span>
+    <strong>Copyright &copy; 2026 <a href="#" class="text-info">KidBibleService</a>.</strong> <span data-i18n="welcomeTitle">Visual Catalog System</span>
   </footer>
 </div>
 <!-- ./wrapper -->
@@ -1901,6 +1627,10 @@
       showSection('notifications-section', 'nav-notifications');
       loadNotifications();
     });
+    $('#nav-aws-upload').click(function(e) {
+      e.preventDefault();
+      showSection('aws-upload-section', 'nav-aws-upload');
+    });
 
     // Language switcher click events
     $('.lang-btn').click(function(e) {
@@ -1918,6 +1648,104 @@
       if ($('#nav-payments').hasClass('active')) loadPayments();
       if ($('#nav-notifications').hasClass('active')) loadNotifications();
       updateDashboardStats();
+    });
+
+    // Custom file input initialization for AWS file
+    $('#awsFileInput').change(function() {
+      if (this.files && this.files[0]) {
+        $('#awsFileLabel').text(this.files[0].name);
+      }
+    });
+
+    // AWS Upload submission handler
+    $('#awsUploadForm').submit(function(e) {
+      e.preventDefault();
+      
+      const fileInput = $('#awsFileInput')[0];
+      if (!fileInput.files || fileInput.files.length === 0) {
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      // Append credentials/settings if provided
+      const bucketName = $('#awsS3BucketInput').val().trim();
+      const accessKeyId = $('#awsAccessKeyIdInput').val().trim();
+      const secretAccessKey = $('#awsSecretAccessKeyInput').val().trim();
+      const region = $('#awsRegionInput').val().trim();
+      
+      if (bucketName) formData.append('bucketName', bucketName);
+      if (accessKeyId) formData.append('accessKeyId', accessKeyId);
+      if (secretAccessKey) formData.append('secretAccessKey', secretAccessKey);
+      if (region) formData.append('region', region);
+      
+      // UI state
+      $('#aws-upload-alert').html('');
+      $('#awsResultContainer').hide();
+      $('#awsProgressContainer').show();
+      $('#awsProgressBar').css('width', '0%').attr('aria-valuenow', 0).text('0%');
+      
+      const uploadingText = locales[currentLang] && locales[currentLang].uploading ? locales[currentLang].uploading : 'Uploading...';
+      $('#awsUploadSubmitBtn').prop('disabled', true).html(`<i class="fas fa-spinner fa-spin mr-1"></i> <span>${uploadingText}</span>`);
+      
+      $.ajax({
+        xhr: function() {
+          const xhr = new window.XMLHttpRequest();
+          xhr.upload.addEventListener('progress', function(evt) {
+            if (evt.lengthComputable) {
+              const percentComplete = Math.round((evt.loaded / evt.total) * 100);
+              $('#awsProgressBar').css('width', percentComplete + '%').attr('aria-valuenow', percentComplete).text(percentComplete + '%');
+            }
+          }, false);
+          return xhr;
+        },
+        url: '/api/aws/upload',
+        type: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          $('#awsProgressContainer').hide();
+          
+          const uploadToAwsText = locales[currentLang] && locales[currentLang].uploadToAws ? locales[currentLang].uploadToAws : 'Upload to AWS';
+          $('#awsUploadSubmitBtn').prop('disabled', false).html(`<i class="fas fa-upload mr-1"></i> <span>${uploadToAwsText}</span>`);
+          
+          $('#awsResultUrl').val(response.url);
+          $('#awsResultContainer').fadeIn();
+        },
+        error: function(xhr) {
+          $('#awsProgressContainer').hide();
+          
+          const uploadToAwsText = locales[currentLang] && locales[currentLang].uploadToAws ? locales[currentLang].uploadToAws : 'Upload to AWS';
+          $('#awsUploadSubmitBtn').prop('disabled', false).html(`<i class="fas fa-upload mr-1"></i> <span>${uploadToAwsText}</span>`);
+          
+          const errMsg = xhr.responseJSON ? xhr.responseJSON.message : 'Error uploading file to AWS S3';
+          $('#aws-upload-alert').html(`<div class="alert alert-danger">${errMsg}</div>`);
+        }
+      });
+    });
+
+    // Copy URL helper
+    $('#copyAwsUrlBtn').click(function() {
+      const urlInput = document.getElementById('awsResultUrl');
+      urlInput.select();
+      urlInput.setSelectionRange(0, 99999); // For mobile devices
+      
+      navigator.clipboard.writeText(urlInput.value).then(function() {
+        const copyBtnText = locales[currentLang] && locales[currentLang].copied ? locales[currentLang].copied : 'Copied!';
+        $('#copyAwsUrlBtn').html(`<i class="fas fa-check"></i> <span>${copyBtnText}</span>`);
+        setTimeout(() => {
+          const originalText = locales[currentLang] && locales[currentLang].copy ? locales[currentLang].copy : 'Copy';
+          $('#copyAwsUrlBtn').html(`<i class="far fa-copy"></i> <span>${originalText}</span>`);
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+      });
     });
 
     // Initialize Localization
@@ -3010,7 +2838,7 @@
           <div class="form-group">
             <label for="catImageFile" class="font-weight-bold">Image File</label>
             <input type="file" class="form-control-file" id="catImageFile" accept="image/*">
-            <input type="hidden" id="catImage">
+            <input type="text" class="form-control mt-2" id="catImage" placeholder="Or enter Image URL (S3, CDN...) / Veya Görsel URL'si girin">
             <div id="catImagePreviewContainer" class="mt-2" style="display:none;">
               <small class="text-muted d-block mb-1">Current Image:</small>
               <img id="catImagePreview" src="" style="max-height: 80px; border-radius: 4px;" class="border">
@@ -3081,7 +2909,7 @@
               <div class="form-group">
                 <label for="storyImageFile" class="font-weight-bold">Image File</label>
                 <input type="file" class="form-control-file" id="storyImageFile" accept="image/*">
-                <input type="hidden" id="storyImage">
+                <input type="text" class="form-control mt-2" id="storyImage" placeholder="Or enter Image URL (S3, CDN...) / Veya Görsel URL'si girin">
                 <div id="storyImagePreviewContainer" class="mt-2" style="display:none;">
                   <small class="text-muted d-block mb-1">Current Image:</small>
                   <img id="storyImagePreview" src="" style="max-height: 80px; border-radius: 4px;" class="border">
@@ -3177,7 +3005,7 @@
               <div class="form-group">
                 <label for="audioImageFile" class="font-weight-bold">Image File</label>
                 <input type="file" class="form-control-file" id="audioImageFile" accept="image/*">
-                <input type="hidden" id="audioImage">
+                <input type="text" class="form-control mt-2" id="audioImage" placeholder="Or enter Image URL (S3, CDN...) / Veya Görsel URL'si girin">
                 <div id="audioImagePreviewContainer" class="mt-2" style="display:none;">
                   <small class="text-muted d-block mb-1">Current Image:</small>
                   <img id="audioImagePreview" src="" style="max-height: 80px; border-radius: 4px;" class="border">
@@ -3261,7 +3089,7 @@
               <div class="form-group">
                 <label for="prodImageFile" class="font-weight-bold">Image File</label>
                 <input type="file" class="form-control-file" id="prodImageFile" accept="image/*">
-                <input type="hidden" id="prodImage">
+                <input type="text" class="form-control mt-2" id="prodImage" placeholder="Or enter Image URL (S3, CDN...) / Veya Görsel URL'si girin">
                 <div id="prodImagePreviewContainer" class="mt-2" style="display:none;">
                   <small class="text-muted d-block mb-1">Current Image:</small>
                   <img id="prodImagePreview" src="" style="max-height: 80px; border-radius: 4px;" class="border">

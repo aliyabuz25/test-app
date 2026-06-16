@@ -19,6 +19,7 @@ const categoryController = require('./controllers/CategoryController');
 const storyController = require('./controllers/StoryController');
 const audioItemController = require('./controllers/AudioItemController');
 const productController = require('./controllers/ProductController');
+const awsUploadController = require('./controllers/AwsUploadController');
 const upload = require('./middlewares/upload');
 const userModel = require('./models/User');
 const paymentModel = require('./models/Payment');
@@ -27,7 +28,8 @@ const notificationModel = require('./models/Notification');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Set EJS as templating engine
+// Set EJS as templating engine and set views directory explicitly
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Security Middlewares
@@ -77,6 +79,25 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// JWT Token Verification Middleware
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkeyforbiblecms';
+
+function verifyToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ message: 'Erişim engellendi: Token bulunamadı.' });
+  }
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Geçersiz veya süresi dolmuş token.' });
+    }
+    req.user = user;
+    next();
+  });
+}
 
 // Bruteforce prevention (Rate Limiting)
 const authLimiter = rateLimit({
@@ -166,25 +187,141 @@ app.get('/api/payments', async (req, res) => {
 
 app.post('/api/payments', async (req, res) => {
   try {
-    const { userId, userEmail, productId, amount, currency, status, transactionId } = req.body;
-    if (!userId) {
-      return res.status(400).json({ message: 'userId parametresi gereklidir.' });
+    const { userId, userEmail, productId, amount, currency, status, transactionId, uuid, subscriptionEndDate, ip, location } = req.body;
+    
+    // uid is required
+    const uid = req.body.uid || userId || uuid;
+    if (!uid) {
+      return res.status(400).json({ message: 'uid parametresi gereklidir.' });
     }
+
+    const clientIp = ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
+    const clientLocation = location || 'Unknown';
+
     const newPayment = await paymentModel.create({
-      userId,
+      userId: uid,
       userEmail,
       productId,
       amount,
       currency,
       status,
-      transactionId
+      transactionId,
+      uuid: uuid || null,
+      subscriptionEndDate,
+      ip: clientIp,
+      location: clientLocation
     });
+
     res.status(201).json({
       message: 'Ödeme kaydı başarıyla oluşturuldu.',
       payment: newPayment
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Ödeme kaydı oluşturulamadı.' });
+  }
+});
+
+// Check subscription endpoint
+app.get('/api/subscription/check', async (req, res) => {
+  try {
+    const uid = req.query.uid || req.query.userId || req.query.uuid;
+    if (!uid) {
+      return res.status(400).json({ message: 'uid parametresi gereklidir.' });
+    }
+
+    const db = require('./database');
+    const payment = await db.get(
+      "SELECT * FROM payments WHERE (userId = ? OR uuid = ?) ORDER BY id DESC LIMIT 1",
+      [uid, uid]
+    );
+
+    if (!payment) {
+      return res.status(200).json({ status: 'exhausted', message: 'Subscription not found.' });
+    }
+
+    if (payment.subscriptionEndDate) {
+      const expiryDate = new Date(payment.subscriptionEndDate);
+      if (isNaN(expiryDate.getTime()) || expiryDate < new Date()) {
+        return res.status(200).json({ status: 'exhausted', message: 'Subscription has expired.' });
+      }
+      return res.json({
+        status: 'active',
+        subscriptionEndDate: payment.subscriptionEndDate,
+        payment: {
+          id: payment.id,
+          productId: payment.productId,
+          transactionId: payment.transactionId
+        }
+      });
+    }
+
+    if (payment.status !== 'completed' && payment.status !== 'active') {
+      return res.status(200).json({ status: 'exhausted', message: 'Subscription is not active.' });
+    }
+
+    return res.json({
+      status: 'active',
+      payment: {
+        id: payment.id,
+        productId: payment.productId,
+        transactionId: payment.transactionId
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Abonelik kontrolü sırasında hata oluştu.' });
+  }
+});
+
+app.post('/api/subscription/check', async (req, res) => {
+  try {
+    const uid = req.body.uid || req.body.userId || req.body.uuid;
+    if (!uid) {
+      return res.status(400).json({ message: 'uid parametresi gereklidir.' });
+    }
+
+    const db = require('./database');
+    const payment = await db.get(
+      "SELECT * FROM payments WHERE (userId = ? OR uuid = ?) ORDER BY id DESC LIMIT 1",
+      [uid, uid]
+    );
+
+    if (!payment) {
+      return res.status(200).json({ status: 'exhausted', message: 'Subscription not found.' });
+    }
+
+    if (payment.subscriptionEndDate) {
+      const expiryDate = new Date(payment.subscriptionEndDate);
+      if (isNaN(expiryDate.getTime()) || expiryDate < new Date()) {
+        return res.status(200).json({ status: 'exhausted', message: 'Subscription has expired.' });
+      }
+      return res.json({
+        status: 'active',
+        subscriptionEndDate: payment.subscriptionEndDate,
+        payment: {
+          id: payment.id,
+          productId: payment.productId,
+          transactionId: payment.transactionId
+        }
+      });
+    }
+
+    if (payment.status !== 'completed' && payment.status !== 'active') {
+      return res.status(200).json({ status: 'exhausted', message: 'Subscription is not active.' });
+    }
+
+    return res.json({
+      status: 'active',
+      payment: {
+        id: payment.id,
+        productId: payment.productId,
+        transactionId: payment.transactionId
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Abonelik kontrolü sırasında hata oluştu.' });
   }
 });
 
@@ -241,6 +378,9 @@ app.get('/api/locales', (req, res) => {
     res.status(500).json({ message: 'Locales could not be loaded.' });
   }
 });
+
+// AWS S3 Upload REST API routes
+app.post('/api/aws/upload', verifyToken, upload.genericUpload.single('file'), (req, res) => awsUploadController.uploadFile(req, res));
 
 // Category REST API routes
 app.get('/api/categories', (req, res) => categoryController.getAll(req, res));
