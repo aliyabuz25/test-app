@@ -1,4 +1,4 @@
-# BibleCMS - Admin Panel & API Specification Documentation
+# BibleDashboard - Admin Panel & API Specification Documentation
 
 This repository houses a secure, production-grade Node.js / Express.js Backend API and a dynamic, client-side dynamic CMS Management Dashboard styled with native **AdminLTE 3**. It features automated **DataTables** listing, multi-language localization (EN, TR, DE, ES, FR, IT), dual-thumbnail image uploads via **Multer**, cross-origin resource sharing (**CORS**), security shields (**Helmet**), input **HTML/XSS Sanitization**, and authentication bruteforce protection (**Rate Limiting**).
 
