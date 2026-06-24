@@ -98,12 +98,9 @@ PORT=3000
 NODE_ENV=production
 JWT_SECRET=production_jwt_gizli_anahtari_buraya_yazilacak
 
-# AWS S3 CloudShell bilgileriniz
-AWS_ACCESS_KEY_ID=replace_me
-AWS_SECRET_ACCESS_KEY=replace_me
-AWS_SESSION_TOKEN=replace_me
-AWS_REGION=us-east-1
-AWS_S3_BUCKET=gstockfootage-media
+# AWS S3. Production'da EC2 IAM Role kullanın; static access key yazmayın.
+AWS_REGION=eu-north-1
+AWS_S3_BUCKET=biblecms
 AWS_S3_PREFIX=kidsbible-content
 ```
 

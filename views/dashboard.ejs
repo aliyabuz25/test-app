@@ -1926,7 +1926,7 @@
                   </div>
                   <div class="form-group">
                     <label for="awsRegionInput" data-i18n="awsRegion">AWS Region</label>
-                    <input type="text" id="awsRegionInput" class="form-control" value="us-east-1" placeholder="us-east-1">
+                    <input type="text" id="awsRegionInput" class="form-control" value="eu-north-1" placeholder="eu-north-1">
                   </div>
                 </div>
               </div>
@@ -3254,15 +3254,17 @@
     async function uploadFileToPresignedUrl(file, presign) {
       const response = await fetch(presign.uploadUrl, {
         method: 'PUT',
-        headers: {
-          'Content-Type': file.type || presign.contentType || 'application/octet-stream'
-        },
         body: file
       });
 
       if (!response.ok) {
         const details = await response.text();
-        throw new Error(`S3 upload failed for ${presign.fieldName}: ${details || response.status}`);
+        console.error('S3 upload failed', {
+          fieldName: presign.fieldName,
+          status: response.status,
+          details
+        });
+        throw new Error(`S3 upload failed for ${presign.fieldName}.`);
       }
 
       return presign.url;

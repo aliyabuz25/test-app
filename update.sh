@@ -42,13 +42,14 @@ ssh -i "$KEY_PATH" -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_IP" "bash -
 cd \"$REMOTE_DIR\" || exit 1
 touch .env
 sed -i \"/^AWS_S3_BUCKET=/d\" .env
+sed -i \"/^AWS_BUCKET_NAME=/d\" .env
 sed -i \"/^AWS_REGION=/d\" .env
 sed -i \"/^AWS_S3_PREFIX=/d\" .env
 sed -i \"/^AWS_ACCESS_KEY_ID=/d\" .env
 sed -i \"/^AWS_SECRET_ACCESS_KEY=/d\" .env
 sed -i \"/^AWS_SESSION_TOKEN=/d\" .env
-echo \"AWS_S3_BUCKET=gstockfootage-media\" >> .env
-echo \"AWS_REGION=us-east-1\" >> .env
+echo \"AWS_S3_BUCKET=biblecms\" >> .env
+echo \"AWS_REGION=eu-north-1\" >> .env
 echo \"AWS_S3_PREFIX=kidsbible-content\" >> .env
 '"
 
