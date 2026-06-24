@@ -129,15 +129,15 @@ class VideoController {
       }
 
       if (!title || !slug) {
-        return res.status(400).json({ message: 'Lütfen zorunlu alanları doldurun (title, slug).' });
+        return res.status(400).json({ message: 'Please fill required fields: title and slug.' });
       }
 
       if (!videoUrl) {
-        return res.status(400).json({ message: 'Lütfen bir video dosyası yükleyin veya URL girin.' });
+        return res.status(400).json({ message: 'Video URL is missing. Upload a video file or paste a video URL.' });
       }
 
       if (!verticalBannerUrl) {
-        return res.status(400).json({ message: 'Lütfen bir dikey banner dosyası yükleyin veya URL girin.' });
+        return res.status(400).json({ message: 'Vertical banner URL is missing. Upload a banner file or paste a banner URL.' });
       }
 
       // If categoryId is present, fetch the category to get the exact name
