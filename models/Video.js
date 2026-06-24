@@ -1,5 +1,19 @@
 const db = require('../database');
 
+async function ensureSubtitleUrlColumn() {
+  try {
+    await db.run("ALTER TABLE videos ADD COLUMN subtitleUrl TEXT DEFAULT ''");
+  } catch (err) {
+    if (!err || !String(err.message || '').includes('duplicate column name')) {
+      throw err;
+    }
+  }
+}
+
+function isMissingSubtitleColumnError(err) {
+  return err && err.code === 'SQLITE_ERROR' && String(err.message || '').includes('no column named subtitleUrl');
+}
+
 class Video {
   async getAll(filters = {}) {
     try {
@@ -45,7 +59,7 @@ class Video {
   }
 
   async create({ title, slug, categoryId, category, videoUrl, verticalBannerUrl, subtitleUrl, isLocked, isPublished, orderIndex }) {
-    try {
+    const insertVideo = async () => {
       const createdAt = new Date().toISOString();
       const result = await db.run(
         "INSERT INTO videos (title, slug, categoryId, category, videoUrl, verticalBannerUrl, subtitleUrl, isLocked, isPublished, orderIndex, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -77,7 +91,15 @@ class Video {
         orderIndex: orderIndex ? parseInt(orderIndex) : 0,
         createdAt
       };
+    };
+
+    try {
+      return await insertVideo();
     } catch (err) {
+      if (isMissingSubtitleColumnError(err)) {
+        await ensureSubtitleUrlColumn();
+        return insertVideo();
+      }
       console.error(err);
       throw err;
     }
@@ -99,22 +121,32 @@ class Video {
       const updatedIsPublished = isPublished !== undefined ? (isPublished ? 1 : 0) : existing.isPublished;
       const updatedOrderIndex = orderIndex !== undefined ? parseInt(orderIndex) : existing.orderIndex;
 
-      await db.run(
-        "UPDATE videos SET title = ?, slug = ?, categoryId = ?, category = ?, videoUrl = ?, verticalBannerUrl = ?, subtitleUrl = ?, isLocked = ?, isPublished = ?, orderIndex = ? WHERE id = ?",
-        [
-          updatedTitle,
-          updatedSlug,
-          updatedCategoryId,
-          updatedCategory,
-          updatedVideoUrl,
-          updatedVerticalBannerUrl,
-          updatedSubtitleUrl,
-          updatedIsLocked,
-          updatedIsPublished,
-          updatedOrderIndex,
-          parseInt(id)
-        ]
-      );
+      const updateVideo = async () => {
+        await db.run(
+          "UPDATE videos SET title = ?, slug = ?, categoryId = ?, category = ?, videoUrl = ?, verticalBannerUrl = ?, subtitleUrl = ?, isLocked = ?, isPublished = ?, orderIndex = ? WHERE id = ?",
+          [
+            updatedTitle,
+            updatedSlug,
+            updatedCategoryId,
+            updatedCategory,
+            updatedVideoUrl,
+            updatedVerticalBannerUrl,
+            updatedSubtitleUrl,
+            updatedIsLocked,
+            updatedIsPublished,
+            updatedOrderIndex,
+            parseInt(id)
+          ]
+        );
+      };
+
+      try {
+        await updateVideo();
+      } catch (err) {
+        if (!isMissingSubtitleColumnError(err)) throw err;
+        await ensureSubtitleUrlColumn();
+        await updateVideo();
+      }
 
       return {
         id: parseInt(id),

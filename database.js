@@ -286,7 +286,7 @@ async function initDb() {
           )
         `);
 
-        db.get("PRAGMA table_info(videos)", [], (err, rows) => {
+        db.all("PRAGMA table_info(videos)", [], (err, rows) => {
           if (!err && Array.isArray(rows)) {
             const hasSubtitleUrl = rows.some((row) => row.name === 'subtitleUrl');
             if (!hasSubtitleUrl) {

@@ -33,6 +33,19 @@ const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
 const STRIPE_CHECKOUT_SUCCESS_URL = process.env.STRIPE_CHECKOUT_SUCCESS_URL || 'http://localhost:3000/dashboard?payment=success';
 const STRIPE_CHECKOUT_CANCEL_URL = process.env.STRIPE_CHECKOUT_CANCEL_URL || 'http://localhost:3000/dashboard?payment=cancel';
 
+const videoUploadFields = [
+  { name: 'video', maxCount: 1 },
+  { name: 'verticalBanner', maxCount: 1 },
+  { name: 'subtitleFile', maxCount: 1 }
+];
+
+function maybeVideoUpload(req, res, next) {
+  if (req.is('multipart/form-data')) {
+    return upload.mediaUpload.fields(videoUploadFields)(req, res, next);
+  }
+  return next();
+}
+
 // Trust proxy for express-rate-limit behind reverse proxy (like Nginx)
 app.set('trust proxy', 1);
 
@@ -79,15 +92,26 @@ function sanitizeString(str) {
     .replace(/</g, '&' + 'lt;')
     .replace(/>/g, '&' + 'gt;')
     .replace(/"/g, '&' + 'quot;')
-    .replace(/'/g, '&' + '#x27;')
-    .replace(/\//g, '&' + '#x2F;');
+    .replace(/'/g, '&' + '#x27;');
+}
+
+function shouldSkipBodySanitize(key) {
+  return [
+    'imageUrl',
+    'audioUrl',
+    'video',
+    'videoUrl',
+    'verticalBanner',
+    'verticalBannerUrl',
+    'subtitleUrl'
+  ].includes(key);
 }
 
 // Middleware to sanitize all incoming body strings to prevent XSS
 app.use((req, res, next) => {
   if (req.body) {
     for (const key in req.body) {
-      if (typeof req.body[key] === 'string') {
+      if (typeof req.body[key] === 'string' && !shouldSkipBodySanitize(key)) {
         req.body[key] = sanitizeString(req.body[key]);
       }
     }
@@ -683,16 +707,8 @@ app.delete('/api/products/:id', (req, res) => productController.delete(req, res)
 app.get('/api/videos', (req, res) => videoController.getAll(req, res));
 app.get('/api/videos/:id', (req, res) => videoController.getById(req, res));
 app.post('/api/videos/presign', (req, res) => videoController.createPresignedUrls(req, res));
-app.post('/api/videos', upload.mediaUpload.fields([
-  { name: 'video', maxCount: 1 },
-  { name: 'verticalBanner', maxCount: 1 },
-  { name: 'subtitleFile', maxCount: 1 }
-]), (req, res) => videoController.create(req, res));
-app.put('/api/videos/:id', upload.mediaUpload.fields([
-  { name: 'video', maxCount: 1 },
-  { name: 'verticalBanner', maxCount: 1 },
-  { name: 'subtitleFile', maxCount: 1 }
-]), (req, res) => videoController.update(req, res));
+app.post('/api/videos', maybeVideoUpload, (req, res) => videoController.create(req, res));
+app.put('/api/videos/:id', maybeVideoUpload, (req, res) => videoController.update(req, res));
 app.delete('/api/videos/:id', (req, res) => videoController.delete(req, res));
 
 // Catalog creation endpoint supporting multipart uploads for vertical & horizontal thumbnails

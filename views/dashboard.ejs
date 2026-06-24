@@ -3186,6 +3186,14 @@
         success: function(videos) {
           let rows = '';
           videos.forEach(v => {
+            const actions = v.isS3Only
+              ? '<span class="badge badge-info">S3 only</span>'
+              : `
+                  <div class="d-inline-flex" style="gap: 4px;">
+                    <button class="btn btn-sm btn-info" onclick="openEditVideoModal(${v.id}, '${escapeHtml(v.title)}', '${escapeHtml(v.slug)}', '${escapeHtml(v.category)}', '${v.categoryId || ''}', '${escapeHtml(v.verticalBannerUrl)}', '${escapeHtml(v.videoUrl)}', '${escapeHtml(v.subtitleUrl || '')}', ${v.isLocked}, ${v.isPublished}, ${v.orderIndex || 0})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteVideo(${v.id})"><i class="fas fa-trash"></i></button>
+                  </div>
+                `;
             rows += `
               <tr>
                 <td><span class="badge badge-secondary">${v.id}</span></td>
@@ -3205,10 +3213,7 @@
                 <td>${v.isPublished ? '<span class="badge badge-success">Published</span>' : '<span class="badge badge-danger">Draft</span>'}</td>
                 <td>${v.orderIndex || 0}</td>
                 <td class="text-center" style="white-space: nowrap;">
-                  <div class="d-inline-flex" style="gap: 4px;">
-                    <button class="btn btn-sm btn-info" onclick="openEditVideoModal(${v.id}, '${escapeHtml(v.title)}', '${escapeHtml(v.slug)}', '${escapeHtml(v.category)}', '${v.categoryId || ''}', '${escapeHtml(v.verticalBannerUrl)}', '${escapeHtml(v.videoUrl)}', '${escapeHtml(v.subtitleUrl || '')}', ${v.isLocked}, ${v.isPublished}, ${v.orderIndex || 0})"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteVideo(${v.id})"><i class="fas fa-trash"></i></button>
-                  </div>
+                  ${actions}
                 </td>
               </tr>
             `;
@@ -3367,10 +3372,13 @@
       }
 
       const submitMetadata = (payload) => {
+        progressText.text('Saving video metadata...');
         return $.ajax({
           url,
           type,
-          data: payload,
+          data: JSON.stringify(payload),
+          processData: false,
+          contentType: 'application/json',
           success: function() {
             progressBar.css('width', '100%');
             progressText.text('Upload complete 100%');
@@ -3379,8 +3387,9 @@
             loadVideos();
           },
           error: function(err) {
+            console.error('Video metadata save failed', err.responseJSON || err.responseText || err.statusText || err);
             setVideoUploadLock(false);
-            progressWrap.hide();
+            progressText.text('Video metadata could not be saved.');
             const message = err.responseJSON && err.responseJSON.message
               ? err.responseJSON.message
               : (err.responseText || 'Error saving video.');

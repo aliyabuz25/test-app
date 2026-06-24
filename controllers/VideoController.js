@@ -1,7 +1,7 @@
 const videoModel = require('../models/Video');
 const categoryModel = require('../models/Category');
 const fs = require('fs/promises');
-const { createPresignedPutUrl, createS3ObjectKey, uploadFileToS3 } = require('../lib/s3');
+const { createPresignedPutUrl, createS3ObjectKey, listS3Objects, uploadFileToS3 } = require('../lib/s3');
 
 async function maybeUploadToS3(file, keyPrefix) {
   if (!file) return null;
@@ -40,6 +40,77 @@ function makeVideoUrlKeyPrefix(subdir) {
     subtitleFile: 'video-subtitles'
   };
   return `${getRootPrefix()}/${prefixMap[subdir] || subdir}`;
+}
+
+function getObjectTimestamp(object) {
+  const fileName = object.key.split('/').pop() || '';
+  const match = fileName.match(/^(\d{10,})-/);
+  return match ? Number(match[1]) : 0;
+}
+
+function makeTitleFromKey(key) {
+  const fileName = key.split('/').pop() || 'S3 Video';
+  const withoutExt = fileName.replace(/\.[^.]+$/, '');
+  return withoutExt.replace(/^\d{10,}-\d+-/, '').replace(/[-_]+/g, ' ').trim() || 'S3 Video';
+}
+
+function makeSlug(value, fallback) {
+  const slug = String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return slug || fallback;
+}
+
+function findNearestByTimestamp(target, items, maxDiffMs = 10000) {
+  let selected = null;
+  let selectedDiff = Infinity;
+
+  for (const item of items) {
+    const timestamp = getObjectTimestamp(item);
+    if (!timestamp || !target) continue;
+    const diff = Math.abs(timestamp - target);
+    if (diff <= maxDiffMs && diff < selectedDiff) {
+      selected = item;
+      selectedDiff = diff;
+    }
+  }
+
+  return selected;
+}
+
+async function getS3VideoFallbackRows() {
+  const [videos, banners, subtitles] = await Promise.all([
+    listS3Objects({ prefix: makeVideoUrlKeyPrefix('video') }),
+    listS3Objects({ prefix: makeVideoUrlKeyPrefix('verticalBanner') }),
+    listS3Objects({ prefix: makeVideoUrlKeyPrefix('subtitleFile') })
+  ]);
+
+  return videos
+    .sort((a, b) => new Date(b.lastModified || 0) - new Date(a.lastModified || 0))
+    .map((video, index) => {
+      const timestamp = getObjectTimestamp(video);
+      const banner = findNearestByTimestamp(timestamp, banners);
+      const subtitle = findNearestByTimestamp(timestamp, subtitles);
+      const title = makeTitleFromKey(video.key);
+      const slug = makeSlug(`${title}-${timestamp || index + 1}`, `s3-video-${index + 1}`);
+
+      return {
+        id: `s3-${timestamp || index + 1}`,
+        isS3Only: true,
+        title,
+        slug,
+        category: 'S3 Uploaded',
+        categoryId: null,
+        verticalBannerUrl: banner ? banner.url : '',
+        videoUrl: video.url,
+        subtitleUrl: subtitle ? subtitle.url : '',
+        isLocked: 0,
+        isPublished: 1,
+        orderIndex: index + 1,
+        createdAt: video.lastModified
+      };
+    });
 }
 
 class VideoController {
@@ -90,6 +161,16 @@ class VideoController {
         filters.isPublished = req.query.isPublished === 'true' || req.query.isPublished === '1';
       }
       const videos = await videoModel.getAll(filters);
+      if (!videos.length && !filters.categoryId && filters.isPublished === undefined && req.query.source !== 'db') {
+        try {
+          const s3Rows = await getS3VideoFallbackRows();
+          if (s3Rows.length) {
+            return res.json(s3Rows);
+          }
+        } catch (s3Error) {
+          console.error('S3 video fallback list error:', s3Error);
+        }
+      }
       res.json(videos);
     } catch (error) {
       console.error(error);
@@ -129,14 +210,26 @@ class VideoController {
       }
 
       if (!title || !slug) {
+        console.error('Video create validation failed: missing title or slug', {
+          body: req.body,
+          hasFiles: Boolean(req.files)
+        });
         return res.status(400).json({ message: 'Please fill required fields: title and slug.' });
       }
 
       if (!videoUrl) {
+        console.error('Video create validation failed: missing video URL', {
+          body: req.body,
+          files: req.files ? Object.keys(req.files) : []
+        });
         return res.status(400).json({ message: 'Video URL is missing. Upload a video file or paste a video URL.' });
       }
 
       if (!verticalBannerUrl) {
+        console.error('Video create validation failed: missing vertical banner URL', {
+          body: req.body,
+          files: req.files ? Object.keys(req.files) : []
+        });
         return res.status(400).json({ message: 'Vertical banner URL is missing. Upload a banner file or paste a banner URL.' });
       }
 
