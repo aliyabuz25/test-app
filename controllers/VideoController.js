@@ -84,6 +84,14 @@ function findNearestByTimestamp(target, items, maxDiffMs = 10000) {
   return selected;
 }
 
+function getNextOrderFromRows(rows) {
+  const maxOrder = (Array.isArray(rows) ? rows : []).reduce((max, row) => {
+    const order = Number(row && row.orderIndex);
+    return Number.isFinite(order) && order > max ? order : max;
+  }, 0);
+  return maxOrder + 1;
+}
+
 async function getS3VideoFallbackRows() {
   const [videos, banners, subtitles] = await Promise.all([
     listS3Objects({ prefix: makeVideoUrlKeyPrefix('video') }),
@@ -122,7 +130,16 @@ async function getS3VideoFallbackRows() {
 class VideoController {
   async getNextOrderIndex(req, res) {
     try {
-      const nextOrderIndex = await videoModel.getNextOrderIndex();
+      const dbVideos = await videoModel.getAll({});
+      let nextOrderIndex = getNextOrderFromRows(dbVideos);
+
+      try {
+        const s3Rows = await getS3VideoFallbackRows();
+        nextOrderIndex = Math.max(nextOrderIndex, getNextOrderFromRows(s3Rows));
+      } catch (s3Error) {
+        console.error('S3 next order fallback error:', s3Error);
+      }
+
       res.json({ nextOrderIndex });
     } catch (error) {
       console.error('Video next order error:', error);
