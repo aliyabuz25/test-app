@@ -3005,15 +3005,27 @@
       $('#musicItemForm')[0].reset();
       $('#musicItemId').val('');
       $('#musicCategory').val('');
-      $('#musicCategoryId').val('');
+      $('#musicCategoryId').val(generateRandomCategoryId());
       $('#musicImage').val('');
       $('#musicImageFile').val('');
       $('#musicAudioFile').val('');
       $('#musicUrlField').val('');
       $('#musicImagePreviewContainer').hide();
       $('#musicImagePreview').attr('src', '');
+      $('#musicUploadStatus').removeClass('alert-danger alert-success alert-warning').addClass('alert-light').text('Select an image and audio file, then publish.').show();
       $('#musicItemModal').modal('show');
     };
+
+    function setMusicFormBusy(isBusy, message) {
+      $('#musicItemModal .close-btn, #musicItemModal .btn-secondary, #musicItemModal button[type="submit"]').prop('disabled', isBusy);
+      if (message) {
+        $('#musicUploadStatus')
+          .removeClass('alert-light alert-danger alert-success alert-warning')
+          .addClass(isBusy ? 'alert-warning' : 'alert-light')
+          .text(message)
+          .show();
+      }
+    }
 
     $('#musicItemForm').submit(function(e) {
       e.preventDefault();
@@ -3021,11 +3033,11 @@
       const audioFileInput = $('#musicAudioFile')[0];
 
       if (!imageFileInput.files.length && !$('#musicImage').val()) {
-        alert('Please select an image file to upload or enter an image URL.');
+        $('#musicUploadStatus').removeClass('alert-light alert-success alert-warning').addClass('alert-danger').text('Please select an image file.').show();
         return;
       }
       if (!audioFileInput.files.length && !$('#musicUrlField').val()) {
-        alert('Please select an audio file to upload or enter an audio URL.');
+        $('#musicUploadStatus').removeClass('alert-light alert-success alert-warning').addClass('alert-danger').text('Please select an audio file.').show();
         return;
       }
 
@@ -3053,12 +3065,21 @@
         data: formData,
         processData: false,
         contentType: false,
+        beforeSend: function() {
+          setMusicFormBusy(true, 'Uploading music item. Please wait...');
+        },
         success: function() {
+          setMusicFormBusy(false, 'Music item published.');
           $('#musicItemModal').modal('hide');
           loadMusicItems();
         },
         error: function(err) {
-          alert(err.responseJSON ? err.responseJSON.message : 'Error adding music item.');
+          setMusicFormBusy(false);
+          $('#musicUploadStatus')
+            .removeClass('alert-light alert-success alert-warning')
+            .addClass('alert-danger')
+            .text(err.responseJSON ? err.responseJSON.message : 'Error adding music item.')
+            .show();
         }
       });
     });
@@ -4669,6 +4690,9 @@
     <div class="offcanvas-body-sheet">
       <div class="row">
         <div class="col-md-12">
+          <div class="alert alert-light border mb-3" id="musicUploadStatus" style="font-size: 13px; line-height: 1.45;">
+            Select an image and audio file, then publish.
+          </div>
           <div class="form-group">
             <label for="musicTitle" class="font-weight-bold">Title *</label>
             <input type="text" class="form-control" id="musicTitle" required placeholder="e.g. Joyful Praise">
@@ -4686,16 +4710,14 @@
           </div>
           <div class="form-group">
             <label for="musicCategory" class="font-weight-bold">Category Name</label>
-            <input type="text" class="form-control" id="musicCategory" placeholder="e.g. Nursery Rhymes">
+            <input type="text" class="form-control" id="musicCategory" placeholder="e.g. Worship Music">
           </div>
+          <input type="hidden" id="musicCategoryId">
           <div class="form-group">
-            <label for="musicCategoryId" class="font-weight-bold">Category ID</label>
-            <input type="number" class="form-control" id="musicCategoryId" placeholder="e.g. 5">
-          </div>
-          <div class="form-group">
-            <label for="musicImageFile" class="font-weight-bold">Image File *</label>
+            <label for="musicImageFile" class="font-weight-bold">Cover Image *</label>
             <input type="file" class="form-control-file" id="musicImageFile" accept="image/*">
-            <input type="text" class="form-control mt-2" id="musicImage" placeholder="Or enter Image URL">
+            <input type="hidden" id="musicImage">
+            <small class="text-muted d-block mt-1">Choose the cover image for this music item.</small>
             <div id="musicImagePreviewContainer" class="mt-2" style="display:none;">
               <small class="text-muted d-block mb-1">Current Image:</small>
               <img id="musicImagePreview" src="" style="max-height: 80px; border-radius: 4px;" class="border">
@@ -4704,7 +4726,8 @@
           <div class="form-group">
             <label for="musicAudioFile" class="font-weight-bold">Audio File *</label>
             <input type="file" class="form-control-file" id="musicAudioFile" accept="audio/*">
-            <input type="text" class="form-control mt-2" id="musicUrlField" placeholder="Or enter Audio URL">
+            <input type="hidden" id="musicUrlField">
+            <small class="text-muted d-block mt-1">Choose the audio file to publish.</small>
           </div>
         </div>
       </div>
