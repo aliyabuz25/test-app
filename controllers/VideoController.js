@@ -120,6 +120,16 @@ async function getS3VideoFallbackRows() {
 }
 
 class VideoController {
+  async getNextOrderIndex(req, res) {
+    try {
+      const nextOrderIndex = await videoModel.getNextOrderIndex();
+      res.json({ nextOrderIndex });
+    } catch (error) {
+      console.error('Video next order error:', error);
+      res.status(500).json({ message: 'Could not calculate next video order.' });
+    }
+  }
+
   async createPresignedUrls(req, res) {
     try {
       const items = Array.isArray(req.body?.files) ? req.body.files : [];

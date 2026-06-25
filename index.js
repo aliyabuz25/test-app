@@ -705,6 +705,7 @@ app.delete('/api/products/:id', (req, res) => productController.delete(req, res)
 
 // Video REST API routes
 app.get('/api/videos', (req, res) => videoController.getAll(req, res));
+app.get('/api/videos/next-order', (req, res) => videoController.getNextOrderIndex(req, res));
 app.get('/api/videos/:id', (req, res) => videoController.getById(req, res));
 app.post('/api/videos/presign', (req, res) => videoController.createPresignedUrls(req, res));
 app.post('/api/videos', maybeVideoUpload, (req, res) => videoController.create(req, res));

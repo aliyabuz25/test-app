@@ -3172,6 +3172,35 @@
       nextVideoOrderIndex = maxOrder + 1;
     }
 
+    function getNextVideoOrderIndexFromTable() {
+      let maxOrder = Math.max(0, Number(nextVideoOrderIndex || 1) - 1);
+      $('#videosTableBody tr').each(function() {
+        const order = Number($(this).find('td').eq(11).text().trim());
+        if (Number.isFinite(order) && order > maxOrder) {
+          maxOrder = order;
+        }
+      });
+      return maxOrder + 1;
+    }
+
+    function setVideoOrderIndexFromServer() {
+      $('#videoOrderIndex').val(getNextVideoOrderIndexFromTable());
+      $.ajax({
+        url: '/api/videos/next-order',
+        type: 'GET',
+        success: function(data) {
+          const nextOrder = Number(data && data.nextOrderIndex);
+          if (Number.isFinite(nextOrder) && nextOrder > 0) {
+            nextVideoOrderIndex = nextOrder;
+            $('#videoOrderIndex').val(nextOrder);
+          }
+        },
+        error: function(err) {
+          console.error('Video next order could not be loaded', err.responseText || err.statusText || err);
+        }
+      });
+    }
+
     function setVideoUploadLock(isLocked) {
       isVideoUploadInProgress = isLocked;
       $('#videoModal .close-btn, #videoModal .btn-secondary').prop('disabled', isLocked);
@@ -3278,7 +3307,7 @@
       $('#videoSrtFile').val('');
       $('#videoUrl').val('');
       $('#videoSrtUrl').val('');
-      $('#videoOrderIndex').val(nextVideoOrderIndex);
+      setVideoOrderIndexFromServer();
       $('#videoVerticalBannerPreviewContainer').hide();
       $('#videoVerticalBannerPreview').attr('src', '');
       $('#videoModal').modal('show');
