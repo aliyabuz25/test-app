@@ -1,0 +1,514 @@
+BibleDashboard Mobile App API Documentation
+==========================================
+
+Base URL
+--------
+Production:
+http://54.196.133.35:3000
+
+Local server test:
+http://127.0.0.1:3000
+
+Default headers
+---------------
+For JSON requests:
+Content-Type: application/json
+Accept: application/json
+
+For authenticated requests:
+Authorization: Bearer <TOKEN>
+
+Notes
+-----
+- All media URLs are returned as full URLs.
+- Video files, banners, and subtitles are stored on S3.
+- The mobile app should read media URLs directly from API response fields.
+- Locked content uses isLocked: 1 or true.
+- Published content uses isPublished: 1 or true.
+- Lists are ordered by orderIndex ascending.
+- Admin-only upload endpoints are listed separately at the bottom.
+
+
+Authentication
+==============
+
+POST /api/register
+------------------
+Creates a new user.
+
+URL:
+http://54.196.133.35:3000/api/register
+
+Body:
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "phoneNumber": "5551234567",
+  "password": "password123"
+}
+
+Response:
+{
+  "message": "Kayıt başarıyla tamamlandı.",
+  "user": {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@example.com",
+    "phoneNumber": "5551234567",
+    "isVerified": 1
+  }
+}
+
+
+POST /api/login
+---------------
+Logs in a user and returns a JWT token.
+
+URL:
+http://54.196.133.35:3000/api/login
+
+Body:
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+Response:
+{
+  "message": "Giriş başarılı.",
+  "token": "<JWT_TOKEN>",
+  "user": {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@example.com",
+    "phoneNumber": "5551234567"
+  }
+}
+
+
+GET /api/auth/verify
+--------------------
+Email verification endpoint. This is usually opened from an email verification link.
+
+URL:
+http://54.196.133.35:3000/api/auth/verify?token=<VERIFY_TOKEN>
+
+
+Content Endpoints
+=================
+
+GET /api/catalogs
+-----------------
+Returns visual catalog/publication list.
+
+URL:
+http://54.196.133.35:3000/api/catalogs
+
+Response item fields:
+- id
+- name
+- description
+- thumbnailVertical
+- thumbnailHorizontal
+- createdAt
+
+
+GET /api/categories
+-------------------
+Returns content categories.
+
+URL:
+http://54.196.133.35:3000/api/categories
+
+Response item fields:
+- id
+- title
+- subtitle
+- count
+- image
+- type
+- orderIndex
+- isPublished
+- createdAt
+
+Common type values:
+- story
+- audio
+- video
+
+
+GET /api/stories
+----------------
+Returns story content.
+
+URL:
+http://54.196.133.35:3000/api/stories
+
+Optional query filters:
+?categoryId=1
+?type=Old%20Testament
+?isPublished=1
+
+Response item fields:
+- id
+- title
+- slug
+- type
+- categoryId
+- duration
+- durationSeconds
+- image
+- contentText
+- audioUrl
+- isLocked
+- isPublished
+- orderIndex
+- createdAt
+
+
+GET /api/audio-items
+--------------------
+Returns audio story/content list.
+
+URL:
+http://54.196.133.35:3000/api/audio-items
+
+Optional query filters:
+?categoryId=1
+?category=Old%20Audio%20Testament
+?isPublished=1
+
+Response item fields:
+- id
+- title
+- slug
+- category
+- categoryId
+- duration
+- durationSeconds
+- image
+- audioUrl
+- badgeColor
+- isLocked
+- isPublished
+- orderIndex
+- createdAt
+
+
+GET /api/music-items
+--------------------
+Returns music/audio item list.
+
+URL:
+http://54.196.133.35:3000/api/music-items
+
+Response item fields:
+- id
+- title
+- type
+- category
+- categoryId
+- image
+- audioUrl
+- createdAt
+
+
+GET /api/music-items/:id
+------------------------
+Returns one music item by ID.
+
+Example:
+http://54.196.133.35:3000/api/music-items/1
+
+
+GET /api/products
+-----------------
+Returns store/product items.
+
+URL:
+http://54.196.133.35:3000/api/products
+
+Response item fields:
+- id
+- title
+- category
+- catColor
+- image
+- stories
+- ages
+- pages
+- price
+- priceString
+- externalUrl
+- isAvailable
+- description
+- duration
+- durationSeconds
+- isPublished
+- orderIndex
+- createdAt
+
+
+Video Endpoints
+===============
+
+GET /api/videos
+---------------
+Returns video list for the mobile app.
+
+URL:
+http://54.196.133.35:3000/api/videos
+
+Optional query filters:
+?categoryId=1
+?isPublished=1
+
+Response item fields:
+- id
+- title
+- slug
+- category
+- categoryId
+- verticalBannerUrl
+- videoUrl
+- subtitleUrl
+- videoSizeBytes
+- isLocked
+- isPublished
+- orderIndex
+- createdAt
+
+Example response item:
+{
+  "id": 1,
+  "title": "Genesis",
+  "slug": "genesis",
+  "category": "Kids Videos",
+  "categoryId": null,
+  "verticalBannerUrl": "https://biblecms-media-2026-app.s3.us-east-1.amazonaws.com/kidsbible-content/video-banners/file.png",
+  "videoUrl": "https://biblecms-media-2026-app.s3.us-east-1.amazonaws.com/kidsbible-content/videos/file.mp4",
+  "subtitleUrl": "https://biblecms-media-2026-app.s3.us-east-1.amazonaws.com/kidsbible-content/video-subtitles/file.srt",
+  "videoSizeBytes": 1511036532,
+  "isLocked": 0,
+  "isPublished": 1,
+  "orderIndex": 1,
+  "createdAt": "2026-06-25T00:00:00.000Z"
+}
+
+Mobile app usage:
+- Use verticalBannerUrl for video cover image.
+- Use videoUrl for video playback.
+- Use subtitleUrl for subtitles if not empty.
+- videoSizeBytes can be formatted as MB/GB in the app.
+- If isLocked is 1, require subscription or access logic.
+- If isPublished is 0, hide from public app.
+
+
+GET /api/videos/:id
+-------------------
+Returns one video by ID.
+
+Example:
+http://54.196.133.35:3000/api/videos/1
+
+
+Subscription Endpoints
+======================
+
+GET /api/subscription/check
+---------------------------
+Checks subscription status by uid/userId/uuid query parameter.
+
+URL examples:
+http://54.196.133.35:3000/api/subscription/check?uid=123
+http://54.196.133.35:3000/api/subscription/check?userId=123
+
+Active response:
+{
+  "status": "active",
+  "subscriptionEndDate": "2026-12-31T23:59:59.000Z",
+  "payment": {
+    "id": 1,
+    "productId": "premium_access_yearly",
+    "transactionId": "GPA.xxxx"
+  }
+}
+
+Inactive/expired response:
+{
+  "status": "exhausted",
+  "message": "Subscription not found."
+}
+
+
+POST /api/subscription/check
+----------------------------
+Same subscription check using JSON body.
+
+URL:
+http://54.196.133.35:3000/api/subscription/check
+
+Body:
+{
+  "uid": "123"
+}
+
+
+Payment Endpoints
+=================
+
+POST /api/payments
+------------------
+Creates a payment/subscription record.
+
+URL:
+http://54.196.133.35:3000/api/payments
+
+Typical body:
+{
+  "userId": 1,
+  "userEmail": "john@example.com",
+  "productId": "premium_access_yearly",
+  "amount": 49.99,
+  "currency": "USD",
+  "status": "completed",
+  "transactionId": "GPA.xxxx"
+}
+
+
+POST /api/payments/stripe-checkout
+----------------------------------
+Creates a Stripe checkout link.
+
+URL:
+http://54.196.133.35:3000/api/payments/stripe-checkout
+
+Body:
+{
+  "uid": "123",
+  "userEmail": "john@example.com",
+  "productId": "premium_access_yearly",
+  "productName": "Premium Access Yearly",
+  "amount": 49.99,
+  "currency": "USD",
+  "successUrl": "https://example.com/success",
+  "cancelUrl": "https://example.com/cancel"
+}
+
+Response:
+{
+  "message": "Stripe checkout bağlantısı oluşturuldu.",
+  "checkoutUrl": "https://checkout.stripe.com/...",
+  "checkoutSessionId": "cs_..."
+}
+
+
+Notifications
+=============
+
+GET /api/notifications
+----------------------
+Returns notification list.
+
+URL:
+http://54.196.133.35:3000/api/notifications
+
+Response item fields:
+- id
+- title
+- message
+- type
+- sentTo
+- createdAt
+- read
+- status
+
+
+Localization
+============
+
+GET /api/locales
+----------------
+Returns localization dictionary.
+
+URL:
+http://54.196.133.35:3000/api/locales
+
+
+Admin-only Endpoints
+====================
+
+The mobile app usually should not use these directly.
+
+POST /api/videos/presign
+Creates presigned S3 PUT URLs for admin uploads.
+
+POST /api/videos
+Creates video metadata after upload.
+
+PUT /api/videos/:id
+Updates video metadata.
+
+DELETE /api/videos/:id
+Deletes video metadata.
+
+GET /api/videos/next-order
+Returns next order index for admin panel.
+
+POST /api/categories
+Creates category.
+
+PUT /api/categories/:id
+Updates category.
+
+DELETE /api/categories/:id
+Deletes category.
+
+POST /api/stories
+Creates story.
+
+PUT /api/stories/:id
+Updates story.
+
+DELETE /api/stories/:id
+Deletes story.
+
+POST /api/audio-items
+Creates audio item.
+
+PUT /api/audio-items/:id
+Updates audio item.
+
+DELETE /api/audio-items/:id
+Deletes audio item.
+
+POST /api/products
+Creates product.
+
+PUT /api/products/:id
+Updates product.
+
+DELETE /api/products/:id
+Deletes product.
+
+POST /api/aws/upload
+Generic authenticated AWS upload endpoint.
+
+
+Quick Mobile App Integration Checklist
+======================================
+
+1. Use GET /api/videos for video screen.
+2. Use verticalBannerUrl as cover image.
+3. Use videoUrl as media source.
+4. Use subtitleUrl if present.
+5. Hide items where isPublished is 0.
+6. Lock items where isLocked is 1.
+7. Sort by orderIndex ascending.
+8. Use GET /api/categories for category tabs.
+9. Use GET /api/subscription/check?uid=<userId> before unlocking paid content.
+10. Store JWT token after POST /api/login if authenticated user flows are required.
+
