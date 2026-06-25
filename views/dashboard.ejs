@@ -3496,8 +3496,9 @@
           subtitleUrl: subtitleUrl
         };
 
-        if ($('#videoOrderIndex').val() !== '') {
-          payload.orderIndex = parseInt($('#videoOrderIndex').val());
+        const manualOrderIndex = Number($('#videoOrderIndex').val());
+        if (Number.isFinite(manualOrderIndex) && manualOrderIndex > 0) {
+          payload.orderIndex = manualOrderIndex;
         }
 
         if (videoFileInput.files && videoFileInput.files[0]) {

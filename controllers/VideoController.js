@@ -43,7 +43,8 @@ function makeVideoUrlKeyPrefix(subdir) {
 }
 
 function hasManualOrderIndex(value) {
-  return value !== undefined && value !== null && value !== '' && value !== 'auto';
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0;
 }
 
 function getObjectTimestamp(object) {
