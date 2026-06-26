@@ -35,6 +35,7 @@ AWS_S3_PREFIX=kidsbible-content
 USER_JSON_ENCRYPTION_KEY=your-long-random-secret
 ```
 The app stores an encrypted backup at `secure/users.json.enc` under the configured S3 prefix. The SQLite database remains the source of truth.
+Admin records are additionally mirrored at `secure/admins.json.enc`.
 
 ### Running Automated Integration Tests
 Execute the integration testing suite checking API endpoints, XSS filtering, rate-limiting triggers, and multipart upload integrity:

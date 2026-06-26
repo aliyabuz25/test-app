@@ -9,7 +9,10 @@ const { initDb } = require('./database');
 initDb().then(() => {
   console.log('SQLite Database initialized & seeded successfully.');
   if (process.env.AWS_S3_BUCKET && process.env.USER_JSON_ENCRYPTION_KEY) {
-    userModel.getAll().then(users => syncUsersToS3(users)).catch(err => {
+    userModel.getAll().then(users => Promise.all([
+      syncUsersToS3(users),
+      syncAdminsToS3(users)
+    ])).catch(err => {
       console.error('Initial user S3 sync failed:', err);
     });
   }
@@ -34,7 +37,7 @@ const notificationModel = require('./models/Notification');
 const catalogModel = require('./models/Catalog');
 const videoModel = require('./models/Video');
 const { listS3Objects } = require('./lib/s3');
-const { syncUsersToS3 } = require('./lib/userS3Store');
+const { syncAdminsToS3, syncUsersToS3 } = require('./lib/userS3Store');
 
 const app = express();
 const PORT = process.env.PORT || 4550;

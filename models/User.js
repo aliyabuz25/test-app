@@ -1,11 +1,14 @@
 const bcrypt = require('bcryptjs');
 const db = require('../database');
-const { syncUsersToS3 } = require('../lib/userS3Store');
+const { syncAdminsToS3, syncUsersToS3 } = require('../lib/userS3Store');
 
-async function syncAllUsersToS3() {
+async function syncUserMirrorsToS3() {
   try {
     const users = await db.all("SELECT * FROM users ORDER BY id ASC");
-    await syncUsersToS3(users);
+    await Promise.all([
+      syncUsersToS3(users),
+      syncAdminsToS3(users)
+    ]);
   } catch (err) {
     console.error('User S3 sync failed:', err);
   }
@@ -62,7 +65,7 @@ class User {
         subscriptionStatus,
         role
       };
-      await syncAllUsersToS3();
+      await syncUserMirrorsToS3();
       return createdUser;
     } catch (err) {
       console.error(err);
@@ -75,7 +78,7 @@ class User {
       const row = await db.get("SELECT * FROM users WHERE verificationToken = ?", [token]);
       if (!row) return null;
       await db.run("UPDATE users SET isVerified = 1, verificationToken = NULL WHERE id = ?", [row.id]);
-      await syncAllUsersToS3();
+      await syncUserMirrorsToS3();
       return row;
     } catch (err) {
       console.error(err);
@@ -103,7 +106,7 @@ class User {
         [updatedFirstName, updatedLastName, updatedEmail, updatedPhoneNumber, updatedPassword, parseInt(id)]
       );
 
-      await syncAllUsersToS3();
+      await syncUserMirrorsToS3();
       return {
         id: parseInt(id),
         firstName: updatedFirstName,
@@ -121,7 +124,7 @@ class User {
     try {
       const result = await db.run("DELETE FROM users WHERE id = ?", [parseInt(id)]);
       if (result.changes > 0) {
-        await syncAllUsersToS3();
+        await syncUserMirrorsToS3();
       }
       return result.changes > 0;
     } catch (err) {
