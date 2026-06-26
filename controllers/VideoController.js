@@ -349,6 +349,7 @@ class VideoController {
       let { title, slug, categoryId, category, videoUrl, verticalBannerUrl, subtitleUrl, videoSizeBytes, isLocked, isPublished, orderIndex } = req.body;
       videoUrl = videoUrl || req.body.video;
       verticalBannerUrl = verticalBannerUrl || req.body.verticalBanner;
+      const isS3OnlyId = String(req.params.id || '').startsWith('s3-');
 
       if (req.files) {
         if (req.files['video'] && req.files['video'][0]) {
@@ -372,7 +373,7 @@ class VideoController {
         }
       }
 
-      const updated = await videoModel.update(req.params.id, {
+      const updatePayload = {
         title,
         slug,
         categoryId: categoryId !== undefined ? (categoryId ? parseInt(categoryId) : null) : undefined,
@@ -384,7 +385,22 @@ class VideoController {
         isLocked: isLocked !== undefined ? (isLocked === 'true' || isLocked === '1' || isLocked === true) : undefined,
         isPublished: isPublished !== undefined ? (isPublished === 'true' || isPublished === '1' || isPublished === true) : undefined,
         orderIndex: orderIndex !== undefined ? parseInt(orderIndex) : undefined
-      });
+      };
+
+      const updated = isS3OnlyId
+        ? await videoModel.create({
+            ...updatePayload,
+            categoryId: updatePayload.categoryId === undefined ? null : updatePayload.categoryId,
+            category: updatePayload.category || 'S3 Uploaded',
+            videoUrl: updatePayload.videoUrl || '',
+            verticalBannerUrl: updatePayload.verticalBannerUrl || '',
+            subtitleUrl: updatePayload.subtitleUrl || '',
+            videoSizeBytes: updatePayload.videoSizeBytes || 0,
+            isLocked: updatePayload.isLocked === undefined ? false : updatePayload.isLocked,
+            isPublished: updatePayload.isPublished === undefined ? true : updatePayload.isPublished,
+            orderIndex: updatePayload.orderIndex || 1
+          })
+        : await videoModel.update(req.params.id, updatePayload);
 
       if (!updated) {
         return res.status(404).json({ message: 'Video bulunamadı.' });

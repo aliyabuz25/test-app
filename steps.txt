@@ -1,0 +1,19 @@
+Subject: Upload Workflow Update
+
+Hi,
+
+To clarify the upload workflow:
+
+We have completed the migration of the original uploads and removed the duplicate entries, so only the correct records remain.
+
+For the remaining five Old Testament books, we can migrate them using the same process. Once the migration is complete, you can simply update the titles in the admin panel to the preferred book names. There will be no need to upload those files again.
+
+For the remaining content, please continue using the same upload process as before. Upload the videos one after another using the Kids Videos category, and you can continue leaving the Order field empty.
+
+There is no need to create separate categories such as Kids Old Testament, Kids New Testament, or Kids Bedtime Stories during the upload process. We will organize the content after all uploads have been completed.
+
+At this stage, the videos are primarily distinguished by their titles. Once everything has been uploaded, including the remaining Old Testament books, the New Testament, and the 53 bedtime stories, we will organize the content, assign the appropriate categories where needed, and finalize the display order.
+
+For now, simply continue uploading the remaining videos using the same workflow. We will take care of the migration, organization, categories, and ordering once all uploads are complete.
+
+Best,

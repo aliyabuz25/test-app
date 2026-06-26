@@ -3308,8 +3308,8 @@
             let rows = '';
           videos.forEach(v => {
             const editButton = v.isS3Only
-              ? '<span class="badge badge-info">S3 only</span>'
-              : `<button class="btn btn-sm btn-info" onclick="openEditVideoModal(${v.id}, '${escapeHtml(v.title)}', '${escapeHtml(v.slug)}', '${escapeHtml(v.category)}', '${v.categoryId || ''}', '${escapeHtml(v.verticalBannerUrl)}', '${escapeHtml(v.videoUrl)}', '${escapeHtml(v.subtitleUrl || '')}', ${v.isLocked}, ${v.isPublished}, ${v.orderIndex || 0})"><i class="fas fa-edit"></i></button>`;
+              ? `<button class="btn btn-sm btn-info" onclick="openEditVideoModal('${escapeHtml(v.id)}', '${escapeHtml(v.title)}', '${escapeHtml(v.slug)}', '${escapeHtml(v.category)}', '${v.categoryId || ''}', '${escapeHtml(v.verticalBannerUrl)}', '${escapeHtml(v.videoUrl)}', '${escapeHtml(v.subtitleUrl || '')}', ${v.isLocked}, ${v.isPublished}, ${v.orderIndex || 0}, true)"><i class="fas fa-edit"></i></button>`
+              : `<button class="btn btn-sm btn-info" onclick="openEditVideoModal(${v.id}, '${escapeHtml(v.title)}', '${escapeHtml(v.slug)}', '${escapeHtml(v.category)}', '${v.categoryId || ''}', '${escapeHtml(v.verticalBannerUrl)}', '${escapeHtml(v.videoUrl)}', '${escapeHtml(v.subtitleUrl || '')}', ${v.isLocked}, ${v.isPublished}, ${v.orderIndex || 0}, false)"><i class="fas fa-edit"></i></button>`;
             const deleteButton = v.isS3Only
               ? `<button class="btn btn-sm btn-danger" onclick="deleteVideo('', true, '${escapeHtml(v.s3Key || '')}')"><i class="fas fa-trash"></i></button>`
               : `<button class="btn btn-sm btn-danger" onclick="deleteVideo(${v.id})"><i class="fas fa-trash"></i></button>`;
@@ -3399,18 +3399,18 @@
       return url;
     }
 
-    window.openEditVideoModal = function(id, title, slug, category, categoryId, verticalBanner, videoUrl, subtitleUrl, isLocked, isPublished, orderIndex) {
+    window.openEditVideoModal = function(id, title, slug, category, categoryId, verticalBanner, videoUrl, subtitleUrl, isLocked, isPublished, orderIndex, isS3Only = false) {
       if (isVideoUploadInProgress) {
         warnVideoUploadInProgress();
         openVideoEditorView();
         return;
       }
-      $('#videoModalLabel').text('Edit Video');
+      $('#videoModalLabel').text(isS3Only ? 'Edit Video (S3)' : 'Edit Video');
       $('#videoId').val(id);
       $('#videoTitle').val(title);
       $('#videoSlug').val(slug || generateRandomSlug('video'));
       $('#videoCategory').val(category);
-      $('#videoCategoryId').val(categoryId || generateRandomCategoryId());
+      $('#videoCategoryId').val(categoryId || '');
       $('#videoVerticalBannerUrl').val(verticalBanner);
       $('#videoUrl').val(videoUrl);
       $('#videoSrtFile').val('');
