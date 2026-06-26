@@ -3296,7 +3296,7 @@
 
     window.loadVideos = function() {
       if ($.fn.DataTable.isDataTable('#videosTable')) {
-        $('#videosTable').DataTable().destroy();
+        $('#videosTable').DataTable().clear().destroy(true);
       }
 
       $.ajax({
@@ -3342,7 +3342,11 @@
             `;
           });
           $('#videosTableBody').html(rows);
-          $('#videosTable').DataTable({ "responsive": true, "autoWidth": false });
+          $('#videosTable').DataTable({
+            responsive: true,
+            autoWidth: false,
+            destroy: true
+          });
         },
         error: function(err) {
           console.error('Video list could not be loaded', err.responseText || err.statusText || err);
