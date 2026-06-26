@@ -5,7 +5,7 @@ const { createPresignedPutUrl, createS3ObjectKey, deleteS3Object, getS3ObjectKey
 
 async function maybeUploadToS3(file, keyPrefix) {
   if (!file) return null;
-  const hasS3Env = process.env.AWS_S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
+  const hasS3Env = Boolean(process.env.AWS_S3_BUCKET || process.env.AWS_BUCKET_NAME);
   if (!hasS3Env) {
     return `/uploads/${file.filename}`;
   }
