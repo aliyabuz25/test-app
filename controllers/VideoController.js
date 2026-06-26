@@ -1,7 +1,7 @@
 const videoModel = require('../models/Video');
 const categoryModel = require('../models/Category');
 const fs = require('fs/promises');
-const { createPresignedPutUrl, createS3ObjectKey, getS3ObjectKeyFromUrl, listS3Objects, uploadFileToS3 } = require('../lib/s3');
+const { createPresignedPutUrl, createS3ObjectKey, deleteS3Object, getS3ObjectKeyFromUrl, listS3Objects, uploadFileToS3 } = require('../lib/s3');
 
 async function maybeUploadToS3(file, keyPrefix) {
   if (!file) return null;
@@ -402,11 +402,27 @@ class VideoController {
 
   async delete(req, res) {
     try {
-      const success = await videoModel.delete(req.params.id);
-      if (!success) {
-        return res.status(404).json({ message: 'Video bulunamadı.' });
+      const id = req.params.id;
+      const video = await videoModel.findById(id);
+      if (video) {
+        const deleted = await videoModel.delete(id);
+        if (!deleted) {
+          return res.status(404).json({ message: 'Video bulunamadı.' });
+        }
+        return res.json({ message: 'Video başarıyla silindi.' });
       }
-      res.json({ message: 'Video başarıyla silindi.' });
+
+      const source = String(req.query.source || '');
+      const key = req.query.key || getS3ObjectKeyFromUrl(req.query.url || req.body?.url || '');
+      if (source === 's3' || key) {
+        if (!key) {
+          return res.status(400).json({ message: 'S3 video silmek için key veya url gerekli.' });
+        }
+        await deleteS3Object({ key });
+        return res.json({ message: 'S3 video başarıyla silindi.' });
+      }
+
+      return res.status(404).json({ message: 'Video bulunamadı.' });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Video silinirken hata oluştu.' });
