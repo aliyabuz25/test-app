@@ -3295,9 +3295,12 @@
     });
 
     window.loadVideos = function() {
+      const $videosTable = $('#videosTable');
+      const $videosTableBody = $('#videosTableBody');
       if ($.fn.DataTable.isDataTable('#videosTable')) {
-        $('#videosTable').DataTable().clear().destroy(true);
+        $videosTable.DataTable().clear().destroy();
       }
+      $videosTableBody.empty();
 
       $.ajax({
         url: '/api/videos',
@@ -3341,11 +3344,12 @@
               </tr>
             `;
           });
-          $('#videosTableBody').html(rows);
-          $('#videosTable').DataTable({
+          $videosTableBody.html(rows);
+          $videosTable.DataTable({
             responsive: true,
             autoWidth: false,
-            destroy: true
+            destroy: true,
+            deferRender: true
           });
         },
         error: function(err) {
