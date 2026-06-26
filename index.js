@@ -40,10 +40,10 @@ const { listS3Objects } = require('./lib/s3');
 const { fetchCollectionFromS3, syncAdminsToS3, syncUsersToS3 } = require('./lib/userS3Store');
 
 const app = express();
-const PORT = process.env.PORT || 4550;
+const PORT = process.env.PORT || 3000;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
-const STRIPE_CHECKOUT_SUCCESS_URL = process.env.STRIPE_CHECKOUT_SUCCESS_URL || 'http://localhost:4550/dashboard?payment=success';
-const STRIPE_CHECKOUT_CANCEL_URL = process.env.STRIPE_CHECKOUT_CANCEL_URL || 'http://localhost:4550/dashboard?payment=cancel';
+const STRIPE_CHECKOUT_SUCCESS_URL = process.env.STRIPE_CHECKOUT_SUCCESS_URL || 'http://localhost:3000/dashboard?payment=success';
+const STRIPE_CHECKOUT_CANCEL_URL = process.env.STRIPE_CHECKOUT_CANCEL_URL || 'http://localhost:3000/dashboard?payment=cancel';
 
 const videoUploadFields = [
   { name: 'video', maxCount: 1 },
