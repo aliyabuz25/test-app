@@ -140,10 +140,13 @@ async function getS3VideoFallbackRows() {
       return {
         id: `s3-${timestamp || index + 1}`,
         isS3Only: true,
+        s3Key: video.key,
         title,
         slug,
         category: 'S3 Uploaded',
         categoryId: null,
+        verticalBannerKey: banner ? banner.key : '',
+        subtitleKey: subtitle ? subtitle.key : '',
         verticalBannerUrl: banner ? banner.url : '',
         videoUrl: video.url,
         subtitleUrl: subtitle ? subtitle.url : '',

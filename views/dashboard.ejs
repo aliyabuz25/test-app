@@ -3311,7 +3311,7 @@
               ? '<span class="badge badge-info">S3 only</span>'
               : `<button class="btn btn-sm btn-info" onclick="openEditVideoModal(${v.id}, '${escapeHtml(v.title)}', '${escapeHtml(v.slug)}', '${escapeHtml(v.category)}', '${v.categoryId || ''}', '${escapeHtml(v.verticalBannerUrl)}', '${escapeHtml(v.videoUrl)}', '${escapeHtml(v.subtitleUrl || '')}', ${v.isLocked}, ${v.isPublished}, ${v.orderIndex || 0})"><i class="fas fa-edit"></i></button>`;
             const deleteButton = v.isS3Only
-              ? `<button class="btn btn-sm btn-danger" onclick="deleteVideo('', true, '${encodeURIComponent(v.videoUrl || '')}')"><i class="fas fa-trash"></i></button>`
+              ? `<button class="btn btn-sm btn-danger" onclick="deleteVideo('', true, '${escapeHtml(v.s3Key || '')}')"><i class="fas fa-trash"></i></button>`
               : `<button class="btn btn-sm btn-danger" onclick="deleteVideo(${v.id})"><i class="fas fa-trash"></i></button>`;
             rows += `
               <tr>
@@ -3622,9 +3622,9 @@
       });
     });
 
-    window.deleteVideo = function(id, isS3Only = false, videoUrl = '') {
+    window.deleteVideo = function(id, isS3Only = false, key = '') {
       if (!confirm('Are you sure you want to delete this video?')) return;
-      const url = isS3Only ? `/api/videos/0?source=s3&key=${encodeURIComponent(videoUrl || id)}` : `/api/videos/${id}`;
+      const url = isS3Only ? `/api/videos/0?source=s3&key=${encodeURIComponent(key)}` : `/api/videos/${id}`;
       $.ajax({
         url,
         type: 'DELETE',
