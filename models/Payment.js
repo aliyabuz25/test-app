@@ -1,4 +1,5 @@
 const db = require('../database');
+const { syncCollectionToS3 } = require('../lib/userS3Store');
 
 class Payment {
   async getAll() {
@@ -31,7 +32,7 @@ class Payment {
         [uId, email, prodId, amt, curr, stat, txId, createdAt, deviceUuid, subEndDate, clientIp, clientLoc]
       );
 
-      return {
+      const createdPayment = {
         id: result.lastID,
         userId: uId,
         userEmail: email,
@@ -46,6 +47,8 @@ class Payment {
         ip: clientIp,
         location: clientLoc
       };
+      await syncCollectionToS3('payments', await this.getAll());
+      return createdPayment;
     } catch (err) {
       console.error(err);
       throw err;
@@ -63,6 +66,7 @@ class Payment {
       if (!existing) return null;
 
       await db.run("UPDATE payments SET status = ? WHERE id = ?", [newStatus, paymentId]);
+      await syncCollectionToS3('payments', await this.getAll());
       return { ...existing, status: newStatus };
     } catch (err) {
       console.error(err);

@@ -1,4 +1,5 @@
 const db = require('../database');
+const { syncCollectionToS3 } = require('../lib/userS3Store');
 
 class Notification {
   async getAll() {
@@ -24,7 +25,7 @@ class Notification {
         [notifTitle, notifMessage, notifType, notifSentTo, createdAt]
       );
 
-      return {
+      const createdNotification = {
         id: result.lastID,
         title: notifTitle,
         message: notifMessage,
@@ -32,6 +33,8 @@ class Notification {
         sentTo: notifSentTo,
         createdAt
       };
+      await syncCollectionToS3('notifications', await this.getAll());
+      return createdNotification;
     } catch (err) {
       console.error(err);
       throw err;
@@ -41,6 +44,9 @@ class Notification {
   async delete(id) {
     try {
       const result = await db.run("DELETE FROM notifications WHERE id = ?", [parseInt(id)]);
+      if (result.changes > 0) {
+        await syncCollectionToS3('notifications', await this.getAll());
+      }
       return result.changes > 0;
     } catch (err) {
       console.error(err);

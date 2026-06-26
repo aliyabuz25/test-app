@@ -37,7 +37,7 @@ const notificationModel = require('./models/Notification');
 const catalogModel = require('./models/Catalog');
 const videoModel = require('./models/Video');
 const { listS3Objects } = require('./lib/s3');
-const { syncAdminsToS3, syncUsersToS3 } = require('./lib/userS3Store');
+const { fetchCollectionFromS3, syncAdminsToS3, syncUsersToS3 } = require('./lib/userS3Store');
 
 const app = express();
 const PORT = process.env.PORT || 4550;
@@ -731,10 +731,10 @@ app.delete('/api/videos/:id', (req, res) => videoController.delete(req, res));
 app.get('/api/dashboard/stats', async (req, res) => {
   try {
     const [catalogs, users, payments, notifications, dbVideos] = await Promise.all([
-      catalogModel.getAll().then(rows => rows.length),
-      userModel.getAll().then(rows => rows.length),
-      paymentModel.getAll().then(rows => rows.length),
-      notificationModel.getAll().then(rows => rows.length),
+      fetchCollectionFromS3('catalogs').catch(() => []),
+      fetchCollectionFromS3('users').catch(() => []),
+      fetchCollectionFromS3('payments').catch(() => []),
+      fetchCollectionFromS3('notifications').catch(() => []),
       videoModel.getAll({}).then(rows => rows.length)
     ]);
 
@@ -746,10 +746,10 @@ app.get('/api/dashboard/stats', async (req, res) => {
     ]);
 
     res.json({
-      catalogs,
-      users,
-      payments,
-      notifications,
+      catalogs: catalogs.length,
+      users: users.length,
+      payments: payments.length,
+      notifications: notifications.length,
       videos: {
         db: dbVideos,
         s3Videos: videoObjects.length,

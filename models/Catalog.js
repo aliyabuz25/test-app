@@ -1,5 +1,6 @@
 const db = require('../database');
 const CDN_BASE_URL = 'https://cdn.biblecms.com/images/';
+const { syncCollectionToS3 } = require('../lib/userS3Store');
 
 class Catalog {
   async getAll() {
@@ -40,7 +41,7 @@ class Catalog {
         [name, description, thumbnailVertical, thumbnailHorizontal, createdAt]
       );
 
-      return {
+      const createdCatalog = {
         id: result.lastID,
         name,
         description,
@@ -48,6 +49,8 @@ class Catalog {
         thumbnailHorizontal,
         createdAt
       };
+      await syncCollectionToS3('catalogs', await this.getAll());
+      return createdCatalog;
     } catch (err) {
       console.error(err);
       throw err;
