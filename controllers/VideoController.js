@@ -93,10 +93,15 @@ function getNextOrderFromRows(rows) {
 }
 
 function getVideoIdentity(video) {
+  const videoUrl = String(video?.videoUrl || '').trim().toLowerCase();
+  if (videoUrl) {
+    return `videoUrl:${videoUrl}`;
+  }
+
   return [
-    String(video?.videoUrl || ''),
     String(video?.slug || ''),
-    String(video?.title || '')
+    String(video?.title || ''),
+    String(video?.s3Key || '')
   ].join('|').toLowerCase();
 }
 
