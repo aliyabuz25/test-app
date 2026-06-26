@@ -23,9 +23,9 @@ Start the Express server on local port `3000`:
 node index.js
 ```
 The server will boot and seed the database with a default Admin user and sample visual catalog publications.
-- **Admin Dashboard Console:** Access at [http://localhost:3000/](http://localhost:3000/) (requires login)
-- **Login Screen:** Direct access at [http://localhost:3000/login](http://localhost:3000/login)
-- **Register Screen:** Direct access at [http://localhost:3000/register](http://localhost:3000/register)
+- **Admin Dashboard Console:** Access at [http://localhost:4550/](http://localhost:4550/) (requires login)
+- **Login Screen:** Direct access at [http://localhost:4550/login](http://localhost:4550/login)
+- **Register Screen:** Direct access at [http://localhost:4550/register](http://localhost:4550/register)
 
 ### Running Automated Integration Tests
 Execute the integration testing suite checking API endpoints, XSS filtering, rate-limiting triggers, and multipart upload integrity:

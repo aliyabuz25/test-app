@@ -1568,6 +1568,8 @@
                 <i class="fas fa-video text-danger mr-1"></i> Videos
               </h3>
               <div class="card-tools">
+                <span class="badge badge-light mr-2">DB: <span id="videosDbCount">0</span></span>
+                <span class="badge badge-info mr-2">Total: <span id="videosCount">0</span></span>
                 <button class="btn btn-danger btn-sm" onclick="openAddVideoModal()">
                   <i class="fas fa-plus mr-1"></i> Add Video
                 </button>
@@ -2242,31 +2244,15 @@
     // Update dashboard metrics
     function updateDashboardStats() {
       $.ajax({
-        url: '/api/catalogs',
+        url: '/api/dashboard/stats',
         type: 'GET',
         success: function(res) {
-          $('#catalogsCount').text(res.length);
-        }
-      });
-      $.ajax({
-        url: '/api/users',
-        type: 'GET',
-        success: function(res) {
-          $('#usersCount').text(res.length);
-        }
-      });
-      $.ajax({
-        url: '/api/payments',
-        type: 'GET',
-        success: function(res) {
-          $('#paymentsCount').text(res.length);
-        }
-      });
-      $.ajax({
-        url: '/api/notifications',
-        type: 'GET',
-        success: function(res) {
-          $('#notificationsCount').text(res.length);
+          $('#catalogsCount').text(res.catalogs ?? 0);
+          $('#usersCount').text(res.users ?? 0);
+          $('#paymentsCount').text(res.payments ?? 0);
+          $('#notificationsCount').text(res.notifications ?? 0);
+          $('#videosCount').text(res.videos && typeof res.videos.totalS3Media === 'number' ? res.videos.totalS3Media : 0);
+          $('#videosDbCount').text(res.videos && typeof res.videos.db === 'number' ? res.videos.db : 0);
         }
       });
     }
@@ -3316,9 +3302,10 @@
       $.ajax({
         url: '/api/videos',
         type: 'GET',
-        success: function(videos) {
-          updateNextVideoOrderIndex(videos);
-          let rows = '';
+          success: function(videos) {
+            updateNextVideoOrderIndex(videos);
+            $('#videosCount').text(videos.length);
+            let rows = '';
           videos.forEach(v => {
             const actions = v.isS3Only
               ? '<span class="badge badge-info">S3 only</span>'

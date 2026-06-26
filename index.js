@@ -26,12 +26,15 @@ const upload = require('./middlewares/upload');
 const userModel = require('./models/User');
 const paymentModel = require('./models/Payment');
 const notificationModel = require('./models/Notification');
+const catalogModel = require('./models/Catalog');
+const videoModel = require('./models/Video');
+const { listS3Objects } = require('./lib/s3');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4550;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
-const STRIPE_CHECKOUT_SUCCESS_URL = process.env.STRIPE_CHECKOUT_SUCCESS_URL || 'http://localhost:3000/dashboard?payment=success';
-const STRIPE_CHECKOUT_CANCEL_URL = process.env.STRIPE_CHECKOUT_CANCEL_URL || 'http://localhost:3000/dashboard?payment=cancel';
+const STRIPE_CHECKOUT_SUCCESS_URL = process.env.STRIPE_CHECKOUT_SUCCESS_URL || 'http://localhost:4550/dashboard?payment=success';
+const STRIPE_CHECKOUT_CANCEL_URL = process.env.STRIPE_CHECKOUT_CANCEL_URL || 'http://localhost:4550/dashboard?payment=cancel';
 
 const videoUploadFields = [
   { name: 'video', maxCount: 1 },
@@ -711,6 +714,42 @@ app.post('/api/videos/presign', (req, res) => videoController.createPresignedUrl
 app.post('/api/videos', maybeVideoUpload, (req, res) => videoController.create(req, res));
 app.put('/api/videos/:id', maybeVideoUpload, (req, res) => videoController.update(req, res));
 app.delete('/api/videos/:id', (req, res) => videoController.delete(req, res));
+
+app.get('/api/dashboard/stats', async (req, res) => {
+  try {
+    const [catalogs, users, payments, notifications, dbVideos] = await Promise.all([
+      catalogModel.getAll().then(rows => rows.length),
+      userModel.getAll().then(rows => rows.length),
+      paymentModel.getAll().then(rows => rows.length),
+      notificationModel.getAll().then(rows => rows.length),
+      videoModel.getAll({}).then(rows => rows.length)
+    ]);
+
+    const rootPrefix = process.env.AWS_S3_PREFIX || 'kidsbible-content';
+    const [videoObjects, bannerObjects, subtitleObjects] = await Promise.all([
+      listS3Objects({ prefix: `${rootPrefix}/videos` }),
+      listS3Objects({ prefix: `${rootPrefix}/video-banners` }),
+      listS3Objects({ prefix: `${rootPrefix}/video-subtitles` })
+    ]);
+
+    res.json({
+      catalogs,
+      users,
+      payments,
+      notifications,
+      videos: {
+        db: dbVideos,
+        s3Videos: videoObjects.length,
+        s3Banners: bannerObjects.length,
+        s3Subtitles: subtitleObjects.length,
+        totalS3Media: videoObjects.length + bannerObjects.length + subtitleObjects.length
+      }
+    });
+  } catch (error) {
+    console.error('Dashboard stats error:', error);
+    res.status(500).json({ message: 'Dashboard stats could not be loaded.' });
+  }
+});
 
 // Catalog creation endpoint supporting multipart uploads for vertical & horizontal thumbnails
 app.post(

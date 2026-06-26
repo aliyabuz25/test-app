@@ -1,7 +1,7 @@
 const videoModel = require('../models/Video');
 const categoryModel = require('../models/Category');
 const fs = require('fs/promises');
-const { createPresignedPutUrl, createS3ObjectKey, listS3Objects, uploadFileToS3 } = require('../lib/s3');
+const { createPresignedPutUrl, createS3ObjectKey, getS3ObjectKeyFromUrl, listS3Objects, uploadFileToS3 } = require('../lib/s3');
 
 async function maybeUploadToS3(file, keyPrefix) {
   if (!file) return null;
@@ -90,6 +90,35 @@ function getNextOrderFromRows(rows) {
     return Number.isFinite(order) && order > max ? order : max;
   }, 0);
   return maxOrder + 1;
+}
+
+function getVideoIdentity(video) {
+  return [
+    String(video?.videoUrl || ''),
+    String(video?.slug || ''),
+    String(video?.title || '')
+  ].join('|').toLowerCase();
+}
+
+function mergeDbAndS3Videos(dbVideos, s3Rows) {
+  const seen = new Set((Array.isArray(dbVideos) ? dbVideos : []).map(getVideoIdentity));
+  const merged = Array.isArray(dbVideos) ? [...dbVideos] : [];
+
+  for (const row of Array.isArray(s3Rows) ? s3Rows : []) {
+    const identity = getVideoIdentity(row);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    merged.push(row);
+  }
+
+  return merged.sort((a, b) => {
+    const orderA = Number(a?.orderIndex) || 0;
+    const orderB = Number(b?.orderIndex) || 0;
+    if (orderA !== orderB) return orderA - orderB;
+    const timeA = new Date(a?.createdAt || 0).getTime();
+    const timeB = new Date(b?.createdAt || 0).getTime();
+    return timeA - timeB;
+  });
 }
 
 async function getS3VideoFallbackRows() {
@@ -194,16 +223,19 @@ class VideoController {
         filters.isPublished = req.query.isPublished === 'true' || req.query.isPublished === '1';
       }
       const videos = await videoModel.getAll(filters);
-      if (!videos.length && !filters.categoryId && filters.isPublished === undefined && req.query.source !== 'db') {
-        try {
-          const s3Rows = await getS3VideoFallbackRows();
-          if (s3Rows.length) {
-            return res.json(s3Rows);
-          }
-        } catch (s3Error) {
-          console.error('S3 video fallback list error:', s3Error);
-        }
+      if (req.query.source === 'db') {
+        return res.json(videos);
       }
+
+      try {
+        const s3Rows = await getS3VideoFallbackRows();
+        if (!filters.categoryId && filters.isPublished === undefined && s3Rows.length) {
+          return res.json(mergeDbAndS3Videos(videos, s3Rows));
+        }
+      } catch (s3Error) {
+        console.error('S3 video fallback list error:', s3Error);
+      }
+
       res.json(videos);
     } catch (error) {
       console.error(error);
