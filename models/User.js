@@ -1,5 +1,15 @@
 const bcrypt = require('bcryptjs');
 const db = require('../database');
+const { syncUsersToS3 } = require('../lib/userS3Store');
+
+async function syncAllUsersToS3() {
+  try {
+    const users = await db.all("SELECT * FROM users ORDER BY id ASC");
+    await syncUsersToS3(users);
+  } catch (err) {
+    console.error('User S3 sync failed:', err);
+  }
+}
 
 class User {
   async findByEmail(email) {
@@ -32,24 +42,28 @@ class User {
     }
   }
 
-  async create({ firstName, lastName, email, phoneNumber, password, verificationToken }) {
+  async create({ firstName, lastName, email, phoneNumber, password, verificationToken = null, role = 'user', subscriptionStatus = 'none', isVerified = 1 }) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const createdAt = new Date().toISOString();
       const result = await db.run(
-        "INSERT INTO users (firstName, lastName, email, phoneNumber, password, createdAt, isVerified, verificationToken) VALUES (?, ?, ?, ?, ?, ?, 1, ?)",
-        [firstName, lastName, email.toLowerCase(), phoneNumber, hashedPassword, createdAt, verificationToken]
+        "INSERT INTO users (firstName, lastName, email, phoneNumber, password, createdAt, isVerified, verificationToken, subscriptionStatus, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [firstName, lastName, email.toLowerCase(), phoneNumber, hashedPassword, createdAt, isVerified ? 1 : 0, verificationToken, subscriptionStatus, role]
       );
-      return {
+      const createdUser = {
         id: result.lastID,
         firstName,
         lastName,
         email: email.toLowerCase(),
         phoneNumber,
         createdAt,
-        isVerified: 1,
-        verificationToken
+        isVerified: isVerified ? 1 : 0,
+        verificationToken,
+        subscriptionStatus,
+        role
       };
+      await syncAllUsersToS3();
+      return createdUser;
     } catch (err) {
       console.error(err);
       throw err;
@@ -61,6 +75,7 @@ class User {
       const row = await db.get("SELECT * FROM users WHERE verificationToken = ?", [token]);
       if (!row) return null;
       await db.run("UPDATE users SET isVerified = 1, verificationToken = NULL WHERE id = ?", [row.id]);
+      await syncAllUsersToS3();
       return row;
     } catch (err) {
       console.error(err);
@@ -88,6 +103,7 @@ class User {
         [updatedFirstName, updatedLastName, updatedEmail, updatedPhoneNumber, updatedPassword, parseInt(id)]
       );
 
+      await syncAllUsersToS3();
       return {
         id: parseInt(id),
         firstName: updatedFirstName,
@@ -104,6 +120,9 @@ class User {
   async delete(id) {
     try {
       const result = await db.run("DELETE FROM users WHERE id = ?", [parseInt(id)]);
+      if (result.changes > 0) {
+        await syncAllUsersToS3();
+      }
       return result.changes > 0;
     } catch (err) {
       console.error(err);

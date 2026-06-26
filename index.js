@@ -8,6 +8,11 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const { initDb } = require('./database');
 initDb().then(() => {
   console.log('SQLite Database initialized & seeded successfully.');
+  if (process.env.AWS_S3_BUCKET && process.env.USER_JSON_ENCRYPTION_KEY) {
+    userModel.getAll().then(users => syncUsersToS3(users)).catch(err => {
+      console.error('Initial user S3 sync failed:', err);
+    });
+  }
 }).catch(err => {
   console.error('Failed to initialize SQLite Database:', err);
 });
@@ -29,6 +34,7 @@ const notificationModel = require('./models/Notification');
 const catalogModel = require('./models/Catalog');
 const videoModel = require('./models/Video');
 const { listS3Objects } = require('./lib/s3');
+const { syncUsersToS3 } = require('./lib/userS3Store');
 
 const app = express();
 const PORT = process.env.PORT || 4550;
@@ -193,14 +199,16 @@ app.post('/api/users', async (req, res) => {
     if (userExists) {
       return res.status(400).json({ message: 'Bu e-posta adresi zaten kullanımda.' });
     }
-    const bcrypt = require('bcryptjs');
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const createdAt = new Date().toISOString();
-    const dbModule = require('./database');
-    await dbModule.run(
-      "INSERT INTO users (firstName, lastName, email, phoneNumber, password, createdAt, isVerified, verificationToken, subscriptionStatus, role) VALUES (?, ?, ?, ?, ?, ?, 1, NULL, 'none', 'user')",
-      [firstName, lastName, email.toLowerCase(), phoneNumber, hashedPassword, createdAt]
-    );
+    await userModel.create({
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      password,
+      role: 'user',
+      subscriptionStatus: 'none',
+      isVerified: true
+    });
     res.status(201).json({
       message: 'Kullanıcı başarıyla oluşturuldu.'
     });
@@ -279,14 +287,16 @@ app.post('/api/admins', async (req, res) => {
     if (userExists) {
       return res.status(400).json({ message: 'Bu e-posta adresi zaten kullanımda.' });
     }
-    const bcrypt = require('bcryptjs');
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const createdAt = new Date().toISOString();
-    const dbModule = require('./database');
-    await dbModule.run(
-      "INSERT INTO users (firstName, lastName, email, phoneNumber, password, createdAt, isVerified, verificationToken, subscriptionStatus, role) VALUES (?, ?, ?, ?, ?, ?, 1, NULL, 'active', 'admin')",
-      [firstName, lastName, email.toLowerCase(), phoneNumber, hashedPassword, createdAt]
-    );
+    await userModel.create({
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      password,
+      role: 'admin',
+      subscriptionStatus: 'active',
+      isVerified: true
+    });
     res.status(201).json({
       message: 'Admin kullanıcısı başarıyla oluşturuldu.'
     });

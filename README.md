@@ -18,7 +18,7 @@ This repository houses a secure, production-grade Node.js / Express.js Backend A
    ```
 
 ### Running the Server
-Start the Express server on local port `3000`:
+Start the Express server on local port `4550`:
 ```bash
 node index.js
 ```
@@ -26,6 +26,15 @@ The server will boot and seed the database with a default Admin user and sample 
 - **Admin Dashboard Console:** Access at [http://localhost:4550/](http://localhost:4550/) (requires login)
 - **Login Screen:** Direct access at [http://localhost:4550/login](http://localhost:4550/login)
 - **Register Screen:** Direct access at [http://localhost:4550/register](http://localhost:4550/register)
+
+### Optional User JSON Backup to S3
+If you want user records mirrored to S3 as encrypted JSON, define:
+```bash
+AWS_S3_BUCKET=your-bucket
+AWS_S3_PREFIX=kidsbible-content
+USER_JSON_ENCRYPTION_KEY=your-long-random-secret
+```
+The app stores an encrypted backup at `secure/users.json.enc` under the configured S3 prefix. The SQLite database remains the source of truth.
 
 ### Running Automated Integration Tests
 Execute the integration testing suite checking API endpoints, XSS filtering, rate-limiting triggers, and multipart upload integrity:
