@@ -1,4 +1,32 @@
 const audioItemModel = require('../models/AudioItem');
+const fs = require('fs/promises');
+const { uploadFileToS3 } = require('../lib/s3');
+
+async function maybeUploadToS3(file, keyPrefix) {
+  if (!file) return null;
+  const hasS3Env = process.env.AWS_S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
+  if (!hasS3Env) {
+    return `/uploads/${file.filename}`;
+  }
+
+  const rootPrefix = process.env.AWS_S3_PREFIX || 'kidsbible-content';
+  const finalPrefix = `${rootPrefix}/${keyPrefix}`;
+
+  const result = await uploadFileToS3({
+    filePath: file.path,
+    originalName: file.originalname,
+    mimeType: file.mimetype,
+    keyPrefix: finalPrefix
+  });
+
+  try {
+    await fs.unlink(file.path);
+  } catch (err) {
+    console.error('Local file cleanup failed:', err);
+  }
+
+  return result.url;
+}
 
 class AudioItemController {
   async getAll(req, res) {
@@ -22,14 +50,14 @@ class AudioItemController {
       
       if (req.files) {
         if (req.files['image'] && req.files['image'][0]) {
-          image = `https://cdn.biblecms.com/images/${req.files['image'][0].filename}`;
+          image = await maybeUploadToS3(req.files['image'][0], 'audio-item-images');
         }
         if (req.files['audio'] && req.files['audio'][0]) {
-          audioUrl = `https://cdn.biblecms.com/audio/${req.files['audio'][0].filename}`;
+          audioUrl = await maybeUploadToS3(req.files['audio'][0], 'audio-item-audio');
         }
       }
       if (req.file) {
-        image = `https://cdn.biblecms.com/images/${req.file.filename}`;
+        image = await maybeUploadToS3(req.file, 'audio-item-images');
       }
 
       if (!title || !slug || !category || !image || !audioUrl) {
@@ -67,14 +95,14 @@ class AudioItemController {
       
       if (req.files) {
         if (req.files['image'] && req.files['image'][0]) {
-          image = `https://cdn.biblecms.com/images/${req.files['image'][0].filename}`;
+          image = await maybeUploadToS3(req.files['image'][0], 'audio-item-images');
         }
         if (req.files['audio'] && req.files['audio'][0]) {
-          audioUrl = `https://cdn.biblecms.com/audio/${req.files['audio'][0].filename}`;
+          audioUrl = await maybeUploadToS3(req.files['audio'][0], 'audio-item-audio');
         }
       }
       if (req.file) {
-        image = `https://cdn.biblecms.com/images/${req.file.filename}`;
+        image = await maybeUploadToS3(req.file, 'audio-item-images');
       }
 
       const updated = await audioItemModel.update(req.params.id, {
